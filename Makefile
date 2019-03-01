@@ -18,7 +18,7 @@ else
     PREFIX      := @
 endif
 
-default_target: dependencies buildui
+first: dependencies buildui
 
 dependencies: directories qmake
 
@@ -37,6 +37,13 @@ buildui:
 	@echo Building UI
 	$(PREFIX)$(MAKE) -C $(BUILD_DIR)
 
+install: first
+	@echo Installing
+	$(PREFIX)$(MAKE) -C $(BUILD_DIR) install
+
+uninstall: first
+	@echo Uninstalling
+	$(PREFIX)$(MAKE) -C $(BUILD_DIR) uninstall
 
 clean: rmdirectories
 
