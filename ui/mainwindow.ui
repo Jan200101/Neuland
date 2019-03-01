@@ -28,8 +28,8 @@
   </property>
   <property name="iconSize">
    <size>
-    <width>12</width>
-    <height>12</height>
+    <width>512</width>
+    <height>512</height>
    </size>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
