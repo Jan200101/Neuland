@@ -18,9 +18,9 @@ else
     PREFIX      := @
 endif
 
-default_target: dependencies qmake
+default_target: dependencies buildui
 
-dependencies: directories
+dependencies: directories qmake
 
 directories:
 	@echo $(MKDIR) $(BUILD_DIR)
@@ -28,8 +28,15 @@ directories:
 
 .ONESHELL:
 qmake:
+	@echo Building Makefile
 	$(PREFIX)$(CD) $(BUILD_DIR)
 	$(PREFIX)$(QMAKE) ..
+
+
+.ONESHELL:
+buildui:
+	@echo Building UI
+	$(PREFIX)$(CD) $(BUILD_DIR)
 	$(PREFIX)$(MAKE)
 
 
