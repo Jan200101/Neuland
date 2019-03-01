@@ -28,6 +28,9 @@ HEADERS += \
 FORMS += \
         ui/mainwindow.ui
 
+RESOURCES += \
+          res/icons.qrc
+
 INCLUDEPATH += \
             src \
             include

@@ -20,8 +20,8 @@
    <string>Neuland</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>icons/icon.png</normaloff>icons/icon.png</iconset>
+   <iconset resource="../res/icons.qrc">
+    <normaloff>:/icon/ui/icons/icon.png</normaloff>:/icon/ui/icons/icon.png</iconset>
   </property>
   <property name="locale">
    <locale language="German" country="Germany"/>
