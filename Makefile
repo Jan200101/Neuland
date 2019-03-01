@@ -33,11 +33,9 @@ qmake:
 	$(PREFIX)$(QMAKE) ..
 
 
-.ONESHELL:
 buildui:
 	@echo Building UI
-	$(PREFIX)$(CD) $(BUILD_DIR)
-	$(PREFIX)$(MAKE)
+	$(PREFIX)$(MAKE) -C $(BUILD_DIR)
 
 
 clean: rmdirectories
