@@ -1,0 +1,5 @@
+green = Ok/Continue
+Grey = List of flashcards
+purple = New Flashcard
+Red = List of answers
+Blue = Question
