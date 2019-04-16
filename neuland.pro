@@ -26,8 +26,8 @@ RESOURCES += \
         res/icons.qrc
 
 INCLUDEPATH += \
-            src \
-            include
+        src \
+        include \
 
 # Deployment
 qnx: target.path = /tmp/$${TARGET}/bin
