@@ -60,7 +60,7 @@ compile: | $(BUILD_DIR) $(BUILD_DIR)/Makefile $(BIN_DIR)
 	${MAKE} -C $(BUILD_DIR)
 
 clean:
-	${RM} ${BUILD_DIR} ${BIN_DIR}
+	-${RM} ${BUILD_DIR} ${BIN_DIR}
 
 docs: Doxyfile
 	-$(DOXYGEN)
