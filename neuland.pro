@@ -10,6 +10,7 @@ OBJECTS_DIR = obj
 MOC_DIR = moc
 
 DEFINES += QT_DEPRECATED_WARNINGS
+QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic
 
 CONFIG += c++11
 
