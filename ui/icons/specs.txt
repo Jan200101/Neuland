@@ -1,6 +1,0 @@
-512 x 512
-bottom right 456
-top left 56
-
-Curve radius 86
-Line width 8
