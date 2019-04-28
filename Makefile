@@ -1,61 +1,68 @@
-PROJECT         := Neuland
+# COMMAND VARIABLES
+RM              := rm -r
+MKDIR           := mkdir -p
+DOXYGEN         := doxygen
+QMAKE           := qmake-qt5
 
-QMAKE           ?= qmake-qt5
+# CROSS COMPLIATION
+# CROSS COMPILATION SETUP
+CROSS           :=
 
-VERBOSE         ?= 0
-
-BUILD_DIR       ?= build
-
-CD              := cd
-MKDIR           := mkdir
-MKDIR_FLAGS     := -p
-RM              := rm
-RM_FLAGS        := -r
-
-ifneq ($(VERBOSE), 0)
-    PREFIX      := 
-else
-    PREFIX      := @
+ifndef HOSTPLATFORM
+	HOSTPLATFORM := UNKNOWN
+	ifeq ($(findstring Windows,$(OS)),Windows)
+		HOSTPLATFORM := WINDOWS
+	else
+		uname := $(strip $(shell uname -s))
+		ifeq ($(findstring Linux,$(uname)),Linux)
+			HOSTPLATFORM := LINUX
+		else ifeq ($(findstring MINGW,$(uname)),MINGW)
+			HOSTPLATFORM := WINDOWS
+		else ifeq ($(findstring MSYS,$(uname)),MSYS)
+			HOSTPLATFORM := WINDOWS
+		endif
+	endif
 endif
 
-first: dependencies buildui
+ifndef PLATFORM
+	PLATFORM := $(HOSTPLATFORM)
+endif
 
-dependencies: qmake
+# CROSS COMPILATION ADAPTION
+ifeq ($(PLATFORM),WINDOWS)
+	ifneq ($(HOSTPLATFORM),WINDOWS)
+		CROSS   := i686-w64-mingw32- # MinGW
+	endif
+endif
 
-directories:
-	@echo $(MKDIR) $(BUILD_DIR)
-	-@$(MKDIR) $(MKDIR_FLAGS) $(BUILD_DIR)
+# DIRECTORIES
+BIN_DIR         := bin
+BUILD_DIR       := build
+
+# TARGETS
+
+default: compile
+
+all: compile docs
+
+$(BIN_DIR):
+	${MKDIR} $@
+
+$(BUILD_DIR):
+	${MKDIR} $@
 
 .ONESHELL:
-qmake: directories
-	@echo Building Makefile
-	$(PREFIX)$(CD) $(BUILD_DIR)
-	$(PREFIX)$(QMAKE) ..
+$(BUILD_DIR)/Makefile:
+	cd ${BUILD_DIR}
+	${CROSS}${QMAKE} ..
 
+compile: | $(BUILD_DIR) $(BUILD_DIR)/Makefile $(BIN_DIR)
+	${MAKE} -C $(BUILD_DIR)
 
-buildui: qmake
-	@echo Building UI
-	$(PREFIX)$(MAKE) -C $(BUILD_DIR)
+clean:
+	${RM} ${BUILD_DIR} ${BIN_DIR}
 
-install: first
-	$(PREFIX)$(MAKE) -C $(BUILD_DIR) install
+docs: Doxyfile
+	-$(DOXYGEN)
 
-uninstall: first
-	$(PREFIX)$(MAKE) -C $(BUILD_DIR) uninstall
-
-clean: qmake
-	$(PREFIX)$(MAKE) -C $(BUILD_DIR) clean
-
-cleandir: remove
-remove: rmdirectories
-
-rmdirectories:
-	@echo $(RM) $(BUILD_DIR)
-	-@$(RM) $(RM_FLAGS) $(BUILD_DIR) 2> /dev/null
-
-loc:
-	-find src include -name '*.cpp' -o -name '*.c' -o -name '*.h' -o -name '*.hpp' -type f | xargs wc -l
-
-doxy:
-	@-doxygen
-
+.PHONY: default compile clean docs

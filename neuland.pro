@@ -5,7 +5,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Neuland
 TEMPLATE = app
 
-OBJECTS_DIR=obj
+DESTDIR = ../bin
+OBJECTS_DIR = obj
+MOC_DIR = moc
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -16,8 +18,8 @@ SOURCES += \
         src/interface.cpp
 
 HEADERS += \
-        include/main.hpp \
-        include/interface.hpp
+        inc/main.hpp \
+        inc/interface.hpp
 
 FORMS += \
         ui/mainwindow.ui
@@ -27,7 +29,7 @@ RESOURCES += \
 
 INCLUDEPATH += \
         src \
-        include \
+        inc \
 
 # Deployment
 qnx: target.path = /tmp/$${TARGET}/bin
