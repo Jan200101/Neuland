@@ -5,9 +5,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Neuland
 TEMPLATE = app
 
-DESTDIR = ../bin
-OBJECTS_DIR = obj
-MOC_DIR = moc
+DESTDIR = ../bin  # bin
+OBJECTS_DIR = obj # build/obj
+MOC_DIR = moc     # build/moc
 
 DEFINES += QT_DEPRECATED_WARNINGS
 QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic
