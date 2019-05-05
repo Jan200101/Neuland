@@ -24,6 +24,7 @@ SOURCES += \
 HEADERS += \
         inc/main.hpp \
         inc/interface.hpp \
+        inc/json/defines.hpp \
         inc/json/reader.hpp \
         inc/json/writer.hpp \
         inc/json/parser.hpp \
