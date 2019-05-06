@@ -7,12 +7,6 @@ MKDIR           := mkdir -p
 DOXYGEN         := doxygen
 QMAKE           := qmake-qt5
 
-# UNIT TESTING VARIABLES
-UNIT_TEST       := $(if $(filter test, $(MAKECMDGOALS)), 1, 0)
-UNIT_TEST_NAME  := test
-UNIT_TEST_SRC   := $(UNIT_TEST_NAME).cpp
-UNIT_TEST_DEF   := UNIT_TEST
-
 # CROSS COMPILATION SETUP
 CROSS           :=
 
@@ -46,32 +40,8 @@ endif
 # DIRECTORIES
 BIN_DIR         := bin
 BUILD_DIR       := build
-OBJ_DIR         := obj
-
-SRC_DIR         := src
-INC_DIR         := inc
 
 FILES           := $(filter-out $(BIN_DIR) $(BUILD_DIR), $(wildcard *))
-
-
-# FLAGS
-FLAGS           := -fPIC
-WARNFLAGS       := -Wall -Wextra -Wpedantic -Winit-self -Wuninitialized -Wpointer-arith -Wcast-align -Wunreachable-code
-INCLUDEFLAGS    := -I${INC_DIR} -I${BUILD_DIR} -I/usr/include/qt5 -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore
-DEFINES         :=
-ifneq ($(UNIT_TEST), 0)
-	DEFINES     += -D${UNIT_TEST_DEF}
-endif
-
-ifneq ($(target), debug)
-	BINFLAGS    := -O3
-else
-	BINFLAGS    := -ggdb3 -Og
-endif
-
-ifneq ($(STATIC), 0)
-    STATICFLAGS := -static
-endif
 
 
 # OBJECT FILES
@@ -107,7 +77,7 @@ $(BUILD_DIR)/Makefile:
 	cd ${BUILD_DIR}
 	${CROSS}${QMAKE} ..
 
-compile: | $(BUILD_DIR) $(BUILD_DIR)/Makefile $(BIN_DIR)
+compile: $(BUILD_DIR)/Makefile | $(BUILD_DIR) $(BIN_DIR)
 	${MAKE} -C $(BUILD_DIR)
 
 clean:
@@ -115,22 +85,6 @@ clean:
 
 docs: Doxyfile
 	-$(DOXYGEN)
-
-# UNIT TESTING
-test: $(TEST_FILES) | $(BUILD_DIR)
-
-$(BIN_DIR)/test_%: $(SRC_DIR)/%.cpp | $(BIN_DIR) $(BUILD_DIR)/$(OBJ_DIR)/$(UNIT_TEST_NAME).o
-	${CROSS}${CXX} -std=c++11 ${INCLUDEFLAGS} ${FLAGS} ${WARNFLAGS} -o$@ $< $(BUILD_DIR)/$(OBJ_DIR)/$(UNIT_TEST_NAME).o
-
-$(BIN_DIR)/test_%: $(SRC_DIR)/%.c | $(BIN_DIR) | $(BUILD_DIR)/$(OBJ_DIR)/$(UNIT_TEST_NAME).o
-	${CROSS}${CC} -std=c++11 ${INCLUDEFLAGS} ${FLAGS} ${WARNFLAGS} -o$@ $< $(BUILD_DIR)/$(OBJ_DIR)/$(UNIT_TEST_NAME).o
-
-
-$(BUILD_DIR)/$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)/$(OBJ_DIR)
-	${CROSS}${CXX} -c -std=c++11 ${INCLUDEFLAGS} ${FLAGS} ${WARNFLAGS} -o$@ $<
-
-$(BUILD_DIR)/$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)/$(OBJ_DIR)
-	${CROSS}${CC} -c -std=c++11 ${INCLUDEFLAGS} ${FLAGS} ${WARNFLAGS} -o$@ $<
 
 
 loc:
