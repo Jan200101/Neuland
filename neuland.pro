@@ -17,17 +17,13 @@ CONFIG += c++11
 SOURCES += \
         src/main.cpp \
         src/interface.cpp \
-        src/json/reader.cpp \
-        src/json/writer.cpp \
-        src/json/parser.cpp \
 
 HEADERS += \
         inc/main.hpp \
         inc/interface.hpp \
-        inc/json/defines.hpp \
-        inc/json/reader.hpp \
-        inc/json/writer.hpp \
-        inc/json/parser.hpp \
+
+LIBS    += \
+        -ljsoncpp
 
 FORMS += \
         ui/mainwindow.ui
