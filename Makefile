@@ -44,19 +44,6 @@ BUILD_DIR       := build
 FILES           := $(filter-out $(BIN_DIR) $(BUILD_DIR), $(wildcard *))
 
 
-# OBJECT FILES
-CXX_SRC_FILES   := $(wildcard   $(SRC_DIR)/*.cpp) \
-				   $(wildcard   $(SRC_DIR)/*/*.cpp)
-CXX_SRC_FILES   := $(filter-out $(SRC_DIR)/$(UNIT_TEST_SRC), $(CXX_SRC_FILES))
-
-CC_SRC_FILES    := $(wildcard   $(SRC_DIR)/*.c) \
-				   $(wildcard   $(SRC_DIR)/*/*.c)
-CC_SRC_FILES    := $(filter-out $(SRC_DIR)/$(UNIT_TEST_SRC), $(CC_SRC_FILES))
-
-TEST_FILES      := $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/test_%, $(CXX_SRC_FILES)) \
-				   $(patsubst $(SRC_DIR)/%.c,  $(BIN_DIR)/test_%, $(CC_SRC_FILES))
-
-
 # TARGETS
 
 default: compile
@@ -69,15 +56,12 @@ $(BIN_DIR):
 $(BUILD_DIR):
 	${MKDIR} $@
 
-$(BUILD_DIR)/$(OBJ_DIR):
-	${MKDIR} $@
-
 .ONESHELL:
-$(BUILD_DIR)/Makefile:
+$(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR)
 	cd ${BUILD_DIR}
 	${CROSS}${QMAKE} ..
 
-compile: $(BUILD_DIR)/Makefile | $(BUILD_DIR) $(BIN_DIR)
+compile: $(BUILD_DIR)/Makefile
 	${MAKE} -C $(BUILD_DIR)
 
 clean:
@@ -96,4 +80,4 @@ tar:
 	tar -cf ${NAME}.tar ${FILES};
 
 
-.PHONY: default compile clean docs test loc tar
+.PHONY: default compile clean docs loc tar
