@@ -1,39 +1,45 @@
-QT       += core gui
+QT             += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Neuland
-TEMPLATE = app
+TARGET          = Neuland
+TEMPLATE        = app
 
-DESTDIR = ../bin  # bin
-OBJECTS_DIR = obj # build/obj
-MOC_DIR = moc     # build/moc
+DESTDIR         = ../bin  # bin
+OBJECTS_DIR     = obj     # build/obj
+MOC_DIR         = moc     # build/moc
 
-DEFINES += QT_DEPRECATED_WARNINGS
-QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic
+DEFINES        += QT_DEPRECATED_WARNINGS
 
-CONFIG += c++11
+QMAKE_CXXFLAGS += \
+               -Wall \
+               -Wextra \
+               -Wshadow \
+               -Wnon-virtual-dtor \
+               -pedantic \
 
-SOURCES += \
-        src/main.cpp \
-        src/interface.cpp \
+CONFIG         += c++11
 
-HEADERS += \
-        inc/main.hpp \
-        inc/interface.hpp \
+SOURCES        += \
+               src/main.cpp \
+               src/interface.cpp \
 
-LIBS    += \
-        -ljsoncpp
+HEADERS        += \
+               inc/main.hpp \
+               inc/interface.hpp \
 
-FORMS += \
-        ui/mainwindow.ui
+LIBS           += \
+               -ljsoncpp \
 
-RESOURCES += \
-        res/icons.qrc
+FORMS          += \
+               ui/mainwindow.ui \
 
-INCLUDEPATH += \
-        src \
-        inc \
+RESOURCES      += \
+               res/icons.qrc
+
+INCLUDEPATH    += \
+               src \
+               inc \
 
 # Deployment
 qnx: target.path = /tmp/$${TARGET}/bin
