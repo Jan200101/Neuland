@@ -1,5 +1,5 @@
-#ifndef INTERFACE_H
-#define INTERFACE_H
+#ifndef QTINTERFACE_HPP
+#define QTINTERFACE_HPP
 
 #include <QMainWindow>
 
