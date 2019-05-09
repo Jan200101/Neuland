@@ -48,7 +48,7 @@ FILES           := $(filter-out $(BIN_DIR) $(BUILD_DIR), $(wildcard *))
 
 default: compile
 
-all: compile docs test
+all: compile docs
 
 $(BIN_DIR):
 	${MKDIR} $@
