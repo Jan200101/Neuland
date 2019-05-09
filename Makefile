@@ -47,6 +47,10 @@ BIN_DIR         := bin
 BUILD_DIR       := build
 OBJ_DIR         := $(BUILD_DIR)/obj
 
+
+OBJ_DIRS        := $(OBJ_DIR) \
+                   $(OBJ_DIR)/backend \
+
 SRC_DIR         := src
 INC_DIR         := inc
 
@@ -87,7 +91,7 @@ $(BUILD_DIR):
 	${MKDIR} $@
 
 $(OBJ_DIR):
-	${MKDIR} $@
+	${MKDIR} ${OBJ_DIRS}
 
 .ONESHELL:
 $(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR)

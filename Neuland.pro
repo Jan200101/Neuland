@@ -23,12 +23,15 @@ CONFIG         += c++11
 SOURCES        += \
                src/main.cpp \
                src/qtinterface.cpp \
-               src/cliinterface.cpp
+               src/cliinterface.cpp \
+               src/backend/dirs.cpp \
 
 HEADERS        += \
                inc/main.hpp \
                inc/qtinterface.hpp \
                inc/cliinterface.hpp \
+               inc/backend/dirs.hpp \
+               inc/defines.hpp \
 
 LIBS           += \
                -ljsoncpp \
