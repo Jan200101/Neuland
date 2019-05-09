@@ -2,11 +2,13 @@
 NAME            := $(shell pwd | sed -E "s/.*\/([a-zA-Z0-9_-]*)/\1/")
 STD             := c++11
 
+
 # COMMAND VARIABLES
 RM              := rm -r
 MKDIR           := mkdir -p
 DOXYGEN         := doxygen
 QMAKE           := qmake-qt5
+
 
 # CROSS COMPILATION SETUP
 CROSS           :=
@@ -31,6 +33,7 @@ ifndef PLATFORM
 	PLATFORM := $(HOSTPLATFORM)
 endif
 
+
 # CROSS COMPILATION ADAPTION
 ifeq ($(PLATFORM),WINDOWS)
 	ifneq ($(HOSTPLATFORM),WINDOWS)
@@ -47,7 +50,7 @@ OBJ_DIR         := $(BUILD_DIR)/obj
 SRC_DIR         := src
 INC_DIR         := inc
 
-FILES           := $(filter-out $(BIN_DIR) $(BUILD_DIR), $(wildcard *))
+FILES           := $(filter-out $(BUILD_DIR), $(wildcard *))
 
 
 # FLAGS
@@ -118,8 +121,10 @@ loc:
 
 
 # TAR
-tar:
-	tar -cf ${NAME}.tar ${FILES};
+tar: $(NAME).tar
+
+$(NAME).tar:
+	tar -cf $@ ${FILES};
 
 
-.PHONY: default compile clean docs loc tar
+.PHONY: default graphical cli clean docs loc tar

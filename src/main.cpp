@@ -4,6 +4,12 @@
 #include "cliinterface.hpp"
 
 #ifndef NO_QT
+#define DEFAULTINTERFACE rungraphical
+#else
+#define DEFAULTINTERFACE runcli
+#endif
+
+#ifndef NO_QT
 #include <QApplication>
 #include "qtinterface.hpp"
 
@@ -32,11 +38,7 @@ int runcli(int& argc, char** argv)
 int main(int argc, char** argv)
 {
     // assign a standard function to call for the app for later reassignment
-#ifndef NO_QT
-    int (*app)(int&, char**) = rungraphical;
-#else
-    int (*app)(int&, char**) = runcli;
-#endif
+    int (*app)(int&, char**) = DEFAULTINTERFACE;
 
     if (argc > 1)
     {
