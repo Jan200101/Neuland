@@ -5,9 +5,8 @@ Ein Karteikarten abfrage System
 erlaubt dir Karteikarten zu managen und dich selber mit ihnen abzufragen
 
 ## Abhängigkeiten
- - Qt5
- - qmake-qt5
  - jsoncpp
+ - Qt5 & qmake-qt5 (optional)
 
 ## Zusammenstellung
 

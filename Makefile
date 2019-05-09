@@ -1,5 +1,6 @@
 # GENERAL VARIABLES
 NAME            := $(shell pwd | sed -E "s/.*\/([a-zA-Z0-9_-]*)/\1/")
+STD             := c++11
 
 # COMMAND VARIABLES
 RM              := rm -r
@@ -37,18 +38,44 @@ ifeq ($(PLATFORM),WINDOWS)
 	endif
 endif
 
+
 # DIRECTORIES
 BIN_DIR         := bin
 BUILD_DIR       := build
+OBJ_DIR         := $(BUILD_DIR)/obj
+
+SRC_DIR         := src
+INC_DIR         := inc
 
 FILES           := $(filter-out $(BIN_DIR) $(BUILD_DIR), $(wildcard *))
 
 
+# FLAGS
+CFLAGS          :=
+CXXFLAGS        :=
+WARNFLAGS       := -Wall -Wextra -Wpedantic -Winit-self -Wuninitialized -Wpointer-arith -Wcast-align -Wunreachable-code
+INCLUDEFLAGS    := -I${INC_DIR}
+DEFINES         :=
+
+# OBJECT FILES
+CXX_SRC_FILES   := $(wildcard   $(SRC_DIR)/*.cpp) \
+				   $(wildcard   $(SRC_DIR)/*/*.cpp)
+CXX_SRC_FILES   := $(filter-out $(SRC_DIR)/$(UNIT_TEST_SRC), $(CXX_SRC_FILES))
+
+CC_SRC_FILES    := $(wildcard   $(SRC_DIR)/*.c) \
+				   $(wildcard   $(SRC_DIR)/*/*.c)
+CC_SRC_FILES    := $(filter-out $(SRC_DIR)/$(UNIT_TEST_SRC), $(CC_SRC_FILES))
+
+
+OBJ_FILES       := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o, $(CXX_SRC_FILES)) \
+				   $(patsubst $(SRC_DIR)/%.c,  $(OBJ_DIR)/%.o, $(CC_SRC_FILES))
+
+
 # TARGETS
 
-default: compile
+default: graphical
 
-all: compile docs
+all: graphical docs
 
 $(BIN_DIR):
 	${MKDIR} $@
@@ -56,19 +83,34 @@ $(BIN_DIR):
 $(BUILD_DIR):
 	${MKDIR} $@
 
+$(OBJ_DIR):
+	${MKDIR} $@
+
 .ONESHELL:
 $(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR)
 	cd ${BUILD_DIR}
 	${CROSS}${QMAKE} ..
 
-compile: $(BUILD_DIR)/Makefile
+graphical: $(BUILD_DIR)/Makefile
 	${MAKE} -C $(BUILD_DIR)
+
+cli: $(BIN_DIR)/$(NAME)
 
 clean:
 	-${RM} ${NAME}.tar ${BUILD_DIR} ${BIN_DIR}
 
 docs: Doxyfile
 	-$(DOXYGEN)
+
+
+$(BIN_DIR)/$(NAME): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)
+	${CROSS}${CXX} -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${STATICFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS) -o$@ $^
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	${CROSS}${CXX} -c  -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${STATICFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} -o$@ $<
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	${CROSS}${CC} -c -std=${STD} ${CFLAGS} ${WARNFLAGS} ${STATICFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} -o$@ $<
 
 
 loc:

@@ -1,10 +1,11 @@
 #include <cstring>
 #include <iostream>
 
-#include "qtinterface.hpp"
+#include "cliinterface.hpp"
 
 #ifndef NO_QT
 #include <QApplication>
+#include "qtinterface.hpp"
 
 int rungraphical(int& argc, char** argv)
 {
@@ -31,7 +32,11 @@ int runcli(int& argc, char** argv)
 int main(int argc, char** argv)
 {
     // assign a standard function to call for the app for later reassignment
+#ifndef NO_QT
     int (*app)(int&, char**) = rungraphical;
+#else
+    int (*app)(int&, char**) = runcli;
+#endif
 
     if (argc > 1)
     {
@@ -54,10 +59,12 @@ int main(int argc, char** argv)
 
                 terminate = true;
             }
+#ifndef NO_QT
             else if (!std::strcmp(argv[i], "--grapical"))
             {
                 app = rungraphical;
             }
+#endif
             else if (!std::strcmp(argv[i], "--cli"))
             {
                 app = runcli;
