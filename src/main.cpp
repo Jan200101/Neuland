@@ -82,11 +82,8 @@ int main(int argc, char** argv)
             }
             else if (!std::strcmp(argv[i], "--config"))
             {
-                std::string homedir = backend::getHomedir();
-
                 Json::Value k = config::readConfig(
-                    homedir +
-                    "/.local/share/Neuland/config.json");
+                    backend::getConfigdir(backend::getHomedir()) + "/config.json");
 
                 if (!k.empty())
                     std::cout << k << std::endl;

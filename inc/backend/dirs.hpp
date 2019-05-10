@@ -5,7 +5,10 @@
 
 namespace backend
 {
+
+std::string getConfigdir(std::string = "");
 std::string getHomedir();
+
 } // namespace backend
 
 #endif
