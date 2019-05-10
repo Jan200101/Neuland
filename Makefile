@@ -8,7 +8,7 @@ RM              := rm -r
 MKDIR           := mkdir -p
 DOXYGEN         := doxygen
 QMAKE           := qmake-qt5
-
+PKG-CONFIG      := pkg-config
 
 # CROSS COMPILATION SETUP
 CROSS           :=
@@ -58,12 +58,18 @@ FILES           := $(filter-out $(BUILD_DIR), $(wildcard *))
 
 
 # FLAGS
-CFLAGS          :=
-CXXFLAGS        :=
+FLAGS           := `$(CROSS)$(PKG-CONFIG) --cflags ncurses` \
+				   `$(CROSS)$(PKG-CONFIG) --cflags jsoncpp`
+CFLAGS          := $(FLAGS)
+CXXFLAGS        := $(FLAGS)
+
 WARNFLAGS       := -Wall -Wextra -pedantic -Winit-self -Wcast-align -Wuninitialized -Wpointer-arith -Wunreachable-code
+
 INCLUDEFLAGS    := -I${INC_DIR}
-BINFLAGS        := -ljsoncpp -lncurses
-DEFINES         :=
+
+LIBS            := `$(CROSS)$(PKG-CONFIG) --libs ncurses` \
+                   `$(CROSS)$(PKG-CONFIG) --libs jsoncpp`
+BINFLAGS        := $(LIBS)
 
 # OBJECT FILES
 CXX_SRC_FILES   := $(wildcard   $(SRC_DIR)/*.cpp) \
@@ -83,6 +89,7 @@ OBJ_FILES       := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o, $(CXX_SRC_FILES))
 
 default: graphical
 
+# graphical and cli targets clash
 all: graphical docs
 
 $(BIN_DIR):
@@ -112,13 +119,13 @@ docs: Doxyfile
 
 
 $(BIN_DIR)/$(NAME): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)
-	${CROSS}${CXX} -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${STATICFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS) -o$@ $^
+	${CROSS}${CXX} -o$@ $^ -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	${CROSS}${CXX} -c  -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${STATICFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} -o$@ $<
+	${CROSS}${CXX} -c -o$@ $< -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	${CROSS}${CC} -c -std=${STD} ${CFLAGS} ${WARNFLAGS} ${STATICFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} -o$@ $<
+	${CROSS}${CC} -c -o$@ $< -std=${STD} ${CFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS)
 
 
 loc:
