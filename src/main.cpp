@@ -34,14 +34,9 @@ int rungraphical(int& argc, char** argv)
  */
 int runcli(int& argc, char** argv)
 {
-    /**
-     * \todo implement interface
-     */
-
     CliWindow window(argc, argv);
 
-    // return window.show()
-    return 0;
+    return window.exec();
 }
 
 int main(int argc, char** argv)

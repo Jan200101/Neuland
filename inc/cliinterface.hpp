@@ -9,6 +9,8 @@ class CliWindow
 
    public:
     CliWindow(int argc, char** argv);
+
+    int exec();
 };
 
 #endif
