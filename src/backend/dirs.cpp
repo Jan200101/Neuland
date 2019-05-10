@@ -6,17 +6,16 @@
 
 namespace backend
 {
-
 std::string getConfigdir(std::string root)
 {
-	std::string path;
+    std::string path;
 #ifdef __WIN32
-	path = "/.";
+    path = "/.";
 #elif __unix__
-	path = "/.local/share/";
+    path = "/.local/share/";
 #endif
 
-	return root + path + NAME_LOWER;
+    return root + path + NAME_LOWER;
 }
 
 /**
@@ -25,15 +24,10 @@ std::string getConfigdir(std::string root)
 std::string getHomedir()
 {
 #ifdef __WIN32
-/**
-	 * \todo implement Windows part
-	 */
+    return "";
+
 #elif __unix__
-    const char* env = std::getenv("HOME");
-
-    std::string home = env;
-
-    return home;
+    return std::getenv("HOME");
 
 #endif
 }
