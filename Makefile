@@ -60,9 +60,9 @@ FILES           := $(filter-out $(BUILD_DIR), $(wildcard *))
 # FLAGS
 CFLAGS          :=
 CXXFLAGS        :=
-WARNFLAGS       := -Wall -Wextra -Wpedantic -Winit-self -Wuninitialized -Wpointer-arith -Wcast-align -Wunreachable-code
+WARNFLAGS       := -Wall -Wextra -pedantic -Winit-self -Wcast-align -Wuninitialized -Wpointer-arith -Wunreachable-code
 INCLUDEFLAGS    := -I${INC_DIR}
-BINFLAGS        := -ljsoncpp
+BINFLAGS        := -ljsoncpp -lncurses
 DEFINES         :=
 
 # OBJECT FILES

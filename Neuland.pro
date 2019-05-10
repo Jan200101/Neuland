@@ -14,9 +14,12 @@ DEFINES        += QT_DEPRECATED_WARNINGS
 QMAKE_CXXFLAGS += \
                -Wall \
                -Wextra \
-               -Wshadow \
-               -Wnon-virtual-dtor \
                -pedantic \
+               -Winit-self \
+               -Wcast-align \
+               -Wuninitialized \
+               -Wpointer-arith \
+               -Wunreachable-code \
 
 CONFIG         += c++11
 
@@ -37,6 +40,7 @@ HEADERS        += \
 
 LIBS           += \
                -ljsoncpp \
+               -lncurses \
 
 FORMS          += \
                ui/mainwindow.ui \
