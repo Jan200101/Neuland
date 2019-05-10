@@ -37,7 +37,8 @@ endif
 # CROSS COMPILATION ADAPTION
 ifeq ($(PLATFORM),WINDOWS)
 	ifneq ($(HOSTPLATFORM),WINDOWS)
-		CROSS   := i686-w64-mingw32- # MinGW
+		# MXE prefix
+		CROSS   := i686-w64-mingw32.static-
 	endif
 endif
 
