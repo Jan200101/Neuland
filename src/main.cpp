@@ -49,9 +49,6 @@ int main(int argc, char** argv)
         bool terminate = false;
         for (int i = 1; i < argc; ++i)
         {
-            /**
-             * \todo add useful cli arguments
-             */
             if (!std::strcmp(argv[i], "--help"))
             {
                 std::cerr << "Usage: " << argv[0]
@@ -75,12 +72,20 @@ int main(int argc, char** argv)
             {
                 app = runcli;
             }
+            // TODO remove
             else if (!std::strcmp(argv[i], "--config"))
             {
                 Json::Value k = Config::readConfig(Backend::getConfigdir(Backend::getHomedir()) + "/config.json");
 
+                std::cout << "Config parser test.\nIf you see no output underneath nothing could be parsed\n";
+
                 if (!k.empty())
                     std::cout << k << std::endl;
+            }
+            // TODO remove
+            else if (!std::strcmp(argv[i], "--norun"))
+            {
+                terminate = true;
             }
         }
         if (terminate)

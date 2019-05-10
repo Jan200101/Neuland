@@ -3,6 +3,27 @@
 #include "cliinterface.hpp"
 #include "defines.hpp"
 
+WINDOW* create_newwin(int height, int width, int starty, int startx)
+{
+    WINDOW* local_win;
+
+    local_win = newwin(height, width, starty, startx);
+    box(local_win, 0, 0); /* 0, 0 gives default characters 
+                     * for the vertical and horizontal
+                     * lines            */
+    wrefresh(local_win);  /* Show that box        */
+
+    return local_win;
+}
+
+void destroy_win(WINDOW* local_win)
+{
+    wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+
+    wrefresh(local_win);
+    delwin(local_win);
+}
+
 CliWindow::CliWindow(int argc, char** argv)
 {
     this->argc = argc;
@@ -12,7 +33,7 @@ CliWindow::CliWindow(int argc, char** argv)
 int CliWindow::exec()
 {
     WINDOW* my_win;
-    int ch;
+    int keych;
 
     initscr();
     raw();
@@ -22,39 +43,28 @@ int CliWindow::exec()
     mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
     refresh();
 
-    my_win = newwin(LINES - 3, COLS - 4, 2, 2);
-    box(my_win, 0, 0);
-    wrefresh(my_win);
+    my_win = create_newwin(LINES - 3, COLS - 4, 2, 2);
     curs_set(0);
 
-    while ((ch = getch()) != KEY_F(1))
+    while ((keych = getch()) != KEY_F(1))
     {
         curs_set(0);
         refresh();
-        switch (ch)
+        switch (keych)
         {
             case KEY_RESIZE:
-                wrefresh(my_win);
-                delwin(my_win);
+                destroy_win(my_win);
 
+                /* Clears title bar */
                 for (int x = 0; x <= 1; ++x)
                     for (int y = 0; y <= COLS; ++y)
                         mvprintw(x, y, " ");
 
                 mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
+                my_win = create_newwin(LINES - 3, COLS - 4, 2, 2);
 
-                my_win = newwin(LINES - 3, COLS - 4, 2, 2);
-                box(my_win, 0, 0);
-
-                wrefresh(my_win);
                 break;
         }
-
-        /*if (starty < LINES)
-            starty = LINES;
-
-        if (startx < COLS)
-            startx = COLS;*/
     }
 
     endwin(); /* End curses mode		  */
