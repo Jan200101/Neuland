@@ -16,8 +16,8 @@ int CliWindow::exec()
 
     initscr();
     raw();
-    noecho();
     keypad(stdscr, TRUE);
+    noecho();
 
     mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
     refresh();
@@ -25,14 +25,15 @@ int CliWindow::exec()
     my_win = newwin(LINES - 3, COLS - 4, 2, 2);
     box(my_win, 0, 0);
     wrefresh(my_win);
+    curs_set(0);
 
     while ((ch = getch()) != KEY_F(1))
     {
+        curs_set(0);
         refresh();
         switch (ch)
         {
             case KEY_RESIZE:
-                wborder(my_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
                 wrefresh(my_win);
                 delwin(my_win);
 
@@ -43,10 +44,9 @@ int CliWindow::exec()
                 mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
 
                 my_win = newwin(LINES - 3, COLS - 4, 2, 2);
-                box(my_win, 0, 0); /* 0, 0 gives default characters 
-                     * for the vertical and horizontal
-                     * lines            */
-                wrefresh(my_win);  /* Show that box      */
+                box(my_win, 0, 0);
+
+                wrefresh(my_win);
                 break;
         }
 
