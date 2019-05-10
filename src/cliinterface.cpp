@@ -19,7 +19,7 @@ int CliWindow::exec()
     noecho();
     keypad(stdscr, TRUE);
 
-    mvprintw(1, COLS / 2, "%s", NAME_UPPER);
+    mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
     refresh();
 
     my_win = newwin(LINES - 3, COLS - 4, 2, 2);

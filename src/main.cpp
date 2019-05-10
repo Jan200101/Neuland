@@ -77,8 +77,7 @@ int main(int argc, char** argv)
             }
             else if (!std::strcmp(argv[i], "--config"))
             {
-                Json::Value k = Config::readConfig(
-                    Backend::getConfigdir(Backend::getHomedir()) + "/config.json");
+                Json::Value k = Config::readConfig(Backend::getConfigdir(Backend::getHomedir()) + "/config.json");
 
                 if (!k.empty())
                     std::cout << k << std::endl;
