@@ -54,13 +54,13 @@ int main(int argc, char** argv)
              */
             if (!std::strcmp(argv[i], "--help"))
             {
-                std::cerr << "Usage: " << argv[0] << " [--graphical|--cli]"
-                                                     "\nOptions:"
-                                                     "\n  --help                     Shows this message"
+                std::cerr << "Usage: " << argv[0]
+                          << "\nOptions:"
+                             "\n  --help                     Shows this message"
 #ifndef NO_QT
-                                                     "\n  --graphical                Uses a graphical interface"
+                             "\n  --graphical                Uses a graphical interface"
 #endif
-                                                     "\n  --cli                      Uses a CLI interface"
+                             "\n  --cli                      Uses a CLI interface"
                           << std::endl;
 
                 terminate = true;
