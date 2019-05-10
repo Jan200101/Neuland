@@ -6,7 +6,8 @@ allows you to to manage record cards and question yourself with them
 
 ## Dependencies
  - jsoncpp
- - Qt5 & qmake (optional)
+ - ncurses
+ - qt5 & qmake (optional)
 
 ## Building
 

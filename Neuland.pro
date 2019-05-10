@@ -24,12 +24,14 @@ SOURCES        += \
                src/main.cpp \
                src/qtinterface.cpp \
                src/cliinterface.cpp \
+               src/backend/config.cpp \
                src/backend/dirs.cpp \
 
 HEADERS        += \
                inc/main.hpp \
                inc/qtinterface.hpp \
                inc/cliinterface.hpp \
+               inc/backend/config.hpp \
                inc/backend/dirs.hpp \
                inc/defines.hpp \
 

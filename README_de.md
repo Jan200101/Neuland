@@ -6,7 +6,8 @@ erlaubt dir Karteikarten zu managen und dich selber mit ihnen abzufragen
 
 ## Abhängigkeiten
  - jsoncpp
- - Qt5 & qmake-qt5 (optional)
+ - ncurses
+ - qt5 & qmake-qt5 (optional)
 
 ## Zusammenstellung
 

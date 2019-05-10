@@ -62,6 +62,7 @@ CFLAGS          :=
 CXXFLAGS        :=
 WARNFLAGS       := -Wall -Wextra -Wpedantic -Winit-self -Wuninitialized -Wpointer-arith -Wcast-align -Wunreachable-code
 INCLUDEFLAGS    := -I${INC_DIR}
+BINFLAGS        := -ljsoncpp
 DEFINES         :=
 
 # OBJECT FILES

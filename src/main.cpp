@@ -1,7 +1,13 @@
 #include <cstring>
 #include <iostream>
+#include <string>
 
 #include "cliinterface.hpp"
+
+#include "defines.hpp"
+
+#include "backend/config.hpp"
+#include "backend/dirs.hpp"
 
 #ifndef NO_QT
 #define DEFAULTINTERFACE rungraphical
@@ -31,7 +37,10 @@ int runcli(int& argc, char** argv)
     /**
      * \todo implement interface
      */
-    std::cout << __FILE__ << ":" << __LINE__ << " INTERFACE STUB" << std::endl;
+
+    CliWindow window(argc, argv);
+
+    // return window.show()
     return 0;
 }
 
@@ -70,6 +79,17 @@ int main(int argc, char** argv)
             else if (!std::strcmp(argv[i], "--cli"))
             {
                 app = runcli;
+            }
+            else if (!std::strcmp(argv[i], "--config"))
+            {
+                std::string homedir = backend::getHomedir();
+
+                Json::Value k = config::readConfig(
+                    homedir +
+                    "/.local/share/Neuland/config.json");
+
+                if (!k.empty())
+                    std::cout << k << std::endl;
             }
         }
         if (terminate)
