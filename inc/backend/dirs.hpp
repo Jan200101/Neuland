@@ -3,12 +3,11 @@
 
 #include <string>
 
-namespace backend
+namespace Backend
 {
-
 std::string getConfigdir(std::string = "");
 std::string getHomedir();
 
-} // namespace backend
+} // namespace Backend
 
 #endif

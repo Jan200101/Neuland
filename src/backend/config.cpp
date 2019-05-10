@@ -4,7 +4,7 @@
 #include <iostream>
 #include "backend/config.hpp"
 
-namespace config
+namespace Config
 {
 /**
  * @brief checks if a input stream is empty
@@ -30,11 +30,11 @@ Json::Value readConfig(std::string path)
 
     std::ifstream file(path.c_str());
 
-    while (file.good() && !config::isEmpty(file))
+    while (file.good() && !Config::isEmpty(file))
     {
         file >> config;
     }
 
     return config;
 }
-} // namespace config
+} // namespace Config

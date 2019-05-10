@@ -15,13 +15,13 @@
 }
  */
 
-namespace config
+namespace Config
 {
 bool isEmpty(std::ifstream& pFile);
 
 Json::Value readConfig(std::string path);
 
 bool writeConfig(Json::Value config, std::string path);
-} // namespace config
+} // namespace Config
 
 #endif

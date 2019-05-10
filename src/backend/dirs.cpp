@@ -4,7 +4,7 @@
 #include "backend/dirs.hpp"
 #include "defines.hpp"
 
-namespace backend
+namespace Backend
 {
 std::string getConfigdir(std::string root)
 {
@@ -32,4 +32,4 @@ std::string getHomedir()
 #endif
 }
 
-} // namespace backend
+} // namespace Backend
