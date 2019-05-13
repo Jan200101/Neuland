@@ -75,12 +75,11 @@ int main(int argc, char** argv)
             // TODO remove
             else if (!std::strcmp(argv[i], "--config"))
             {
-                Json::Value k = Config::readConfig(Backend::getConfigdir(Backend::getHomedir()) + "/config.json");
+                std::string cfgfile = Backend::getConfigdir(Backend::getHomedir()) + "/config.json";
+                std::cout << cfgfile << std::endl;
+                Json::Value k = Config::readConfig(cfgfile);
 
-                std::cout << "Config parser test.\nIf you see no output underneath nothing could be parsed\n";
-
-                if (!k.empty())
-                    std::cout << k << std::endl;
+                std::cout << k << std::endl;
             }
             // TODO remove
             else if (!std::strcmp(argv[i], "--norun"))

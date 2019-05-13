@@ -11,7 +11,7 @@
  */
 bool isEmpty(std::ifstream& pFile)
 {
-    return pFile.peek() == std::ifstream::traits_type::eof();
+    return pFile.peek() == std::ifstream::traits_type::eof() || pFile.eof();
 }
 
 namespace Config
@@ -30,7 +30,7 @@ Json::Value readConfig(std::string path)
 
     std::ifstream file(path.c_str());
 
-    while (file.good() && isEmpty(file))
+    while (file.good() && !isEmpty(file))
     {
         file >> config;
     }
