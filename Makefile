@@ -36,6 +36,7 @@ endif
 
 # CROSS COMPILATION ADAPTION
 ifeq ($(PLATFORM),WINDOWS)
+	OUT_EXT     := .exe
 	ifneq ($(HOSTPLATFORM),WINDOWS)
 		# MXE prefix
 		CROSS   := i686-w64-mingw32.static-
@@ -112,7 +113,7 @@ $(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR)
 graphical: $(BUILD_DIR)/Makefile
 	${MAKE} -C $(BUILD_DIR)
 
-cli: $(BIN_DIR)/$(NAME)
+cli: $(BIN_DIR)/$(NAME)$(OUT_EXT)
 
 clean:
 	-${RM} ${NAME}.tar ${BUILD_DIR} ${BIN_DIR}
@@ -121,7 +122,7 @@ docs: Doxyfile
 	-$(DOXYGEN)
 
 
-$(BIN_DIR)/$(NAME): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)
+$(BIN_DIR)/$(NAME)$(OUT_EXT): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)
 	${CROSS}${CXX} -o$@ $^ -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
