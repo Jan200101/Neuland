@@ -1,5 +1,7 @@
 # Neuland
 
+[english](README.md)
+
 Ein Karteikarten abfrage System
 
 erlaubt dir Karteikarten zu managen und dich selber mit ihnen abzufragen
@@ -21,3 +23,6 @@ erlaubt dir Karteikarten zu managen und dich selber mit ihnen abzufragen
  - Kompiliere qt5 und jsoncpp mit `make qt5 jsoncpp`
  - Führe `make CROSS=i686-w64-mingw32.static-` aus
  - Führe den Target `cli` aus um ohne Qt5 zu kompilieren
+
+### Windows
+ Die Zusammenstellung auf Windows ist derzeit nicht unterstützt

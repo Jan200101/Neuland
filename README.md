@@ -1,5 +1,7 @@
 # Neuland
 
+[Deutsch](README_de.md)
+
 a record card questioning system
 
 allows you to to manage record cards and question yourself with them
@@ -21,3 +23,7 @@ allows you to to manage record cards and question yourself with them
  - build qt5 and jsoncpp using `make qt5 jsoncpp`
  - run `make CROSS=i686-w64-mingw32.static-` to compile with Qt5
  - run the `cli` target to build without Qt5
+
+### Windows
+ Compiling on windows is currently unsupported duo.
+ If you want to help getting Windows supported help me find a reliable way of compiling this project on Windows

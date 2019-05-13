@@ -3,19 +3,35 @@
 #include "cliinterface.hpp"
 #include "defines.hpp"
 
+/**
+ * @brief creates ncurses window with given value and returns it
+ *
+ * @return WINDOW*
+ * @retval returns freshly allocated WINDOW pointer
+ *
+ * @param height
+ * @param width
+ * @param starty
+ * @param startx
+ */
 WINDOW* create_newwin(int height, int width, int starty, int startx)
 {
     WINDOW* local_win;
 
     local_win = newwin(height, width, starty, startx);
     box(local_win, 0, 0); /* 0, 0 gives default characters 
-                     * for the vertical and horizontal
-                     * lines            */
+                           * for the vertical and horizontal
+                           * lines            */
     wrefresh(local_win);  /* Show that box        */
 
     return local_win;
 }
 
+/**
+ * @brief makes window invisible and then deletes it
+ *
+ * @param local_win
+ */
 void destroy_win(WINDOW* local_win)
 {
     wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -30,6 +46,12 @@ CliWindow::CliWindow(int argc, char** argv)
     this->argv = argv;
 }
 
+/**
+ * @brief main interface loop
+ *
+ * @return int
+ * @retval returns status code
+ */
 int CliWindow::exec()
 {
     WINDOW* my_win;

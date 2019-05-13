@@ -6,6 +6,9 @@
 
 namespace Backend
 {
+/**
+ * @brief returns the config directory for user 
+ */
 std::string getConfigdir(std::string root)
 {
     std::string path;
@@ -20,6 +23,8 @@ std::string getConfigdir(std::string root)
 
 /**
  * @brief returns the users home directory
+ * @return std::string
+ * @retval the path to the users home directory
  */
 std::string getHomedir()
 {

@@ -19,6 +19,9 @@
 #include <QApplication>
 #include "qtinterface.hpp"
 
+/**
+ * @brief function that initializes and executes the graphical (Qt5) interface
+ */
 int rungraphical(int& argc, char** argv)
 {
     QApplication App(argc, argv);
@@ -30,7 +33,7 @@ int rungraphical(int& argc, char** argv)
 #endif
 
 /**
- * STUB CLI interface function
+ * @brief function that initializes and executes the commandline (ncurses) interface
  */
 int runcli(int& argc, char** argv)
 {
@@ -72,7 +75,7 @@ int main(int argc, char** argv)
             {
                 app = runcli;
             }
-            // TODO remove
+            // \TODO remove
             else if (!std::strcmp(argv[i], "--config"))
             {
                 std::string cfgfile = Backend::getConfigdir(Backend::getHomedir()) + "/config.json";
@@ -81,7 +84,7 @@ int main(int argc, char** argv)
 
                 std::cout << k << std::endl;
             }
-            // TODO remove
+            // \TODO remove
             else if (!std::strcmp(argv[i], "--norun"))
             {
                 terminate = true;
