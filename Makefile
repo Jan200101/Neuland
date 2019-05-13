@@ -72,6 +72,8 @@ LIBS            := `$(CROSS)$(PKG-CONFIG) --libs ncurses` \
                    `$(CROSS)$(PKG-CONFIG) --libs jsoncpp`
 BINFLAGS        := $(LIBS)
 
+DEFINES         := -DNO_QT
+
 # OBJECT FILES
 CXX_SRC_FILES   := $(wildcard   $(SRC_DIR)/*.cpp) \
 				   $(wildcard   $(SRC_DIR)/*/*.cpp)
@@ -120,13 +122,13 @@ docs: Doxyfile
 
 
 $(BIN_DIR)/$(NAME): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)
-	${CROSS}${CXX} -o$@ $^ -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS)
+	${CROSS}${CXX} -o$@ $^ -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	${CROSS}${CXX} -c -o$@ $< -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS)
+	${CROSS}${CXX} -c -o$@ $< -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	${CROSS}${CC} -c -o$@ $< -std=${STD} ${CFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} -DNO_QT ${DEFINES} $(BINFLAGS)
+	${CROSS}${CC} -c -o$@ $< -std=${STD} ${CFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
 
 
 loc:
