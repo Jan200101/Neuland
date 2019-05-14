@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "cliinterface.hpp"
+#include "frontend/cliinterface.hpp"
 
 #include "defines.hpp"
 
@@ -17,7 +17,7 @@
 
 #ifndef NO_QT
 #include <QApplication>
-#include "qtinterface.hpp"
+#include "frontend/qtinterface.hpp"
 
 /**
  * @brief function that initializes and executes the graphical (Qt5) interface

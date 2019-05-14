@@ -1,7 +1,7 @@
 #include <ncurses.h>
 
-#include "cliinterface.hpp"
 #include "defines.hpp"
+#include "frontend/cliinterface.hpp"
 
 /**
  * @brief creates ncurses window with given value and returns it

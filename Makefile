@@ -51,6 +51,7 @@ OBJ_DIR         := $(BUILD_DIR)/obj
 
 
 OBJ_DIRS        := $(OBJ_DIR) \
+                   $(OBJ_DIR)/frontend \
                    $(OBJ_DIR)/backend \
 
 SRC_DIR         := src
