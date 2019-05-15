@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <string>
 
 #include "backend/dirs.hpp"
 #include "defines.hpp"
@@ -18,7 +17,9 @@ std::string getConfigdir(std::string root)
     path = "/.local/share/";
 #endif
 
-    return root + path + NAME_LOWER;
+    path = root + path + NAME_LOWER;
+
+    return path;
 }
 
 /**
