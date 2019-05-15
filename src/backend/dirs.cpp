@@ -1,3 +1,4 @@
+#include <sys/stat.h>
 #include <cstdlib>
 
 #include "backend/dirs.hpp"
@@ -6,9 +7,47 @@
 namespace Backend
 {
 /**
- * @brief returns the config directory for user 
+ * @brief creates a directory
+ * creates a directory in the given path with the permissions `rwxr-xr-x.`
+ * @return int
+ * @retval mkdir status code
+ * @param path directory that will be created
  */
-std::string getConfigdir(std::string root)
+int makeDirectory(const char* path)
+{
+    return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+}
+
+/**
+ * @brief creates a directory
+ * creates a directory in the given path with the permissions `rwxr-xr-x.`
+ * @return int
+ * @retval mkdir status code
+ * @param path directory that will be created
+ */
+int makeDirectory(std::string path)
+{
+    return Backend::makeDirectory(path.c_str());
+}
+
+/**
+ * @brief creates the config directory for the current user
+ * @return int
+ * @retval mkdir status code
+ */
+int makeConfigdir()
+{
+    return Backend::makeDirectory(Backend::getConfigdir(Backend::getHomedir()));
+}
+
+/**
+ * @brief return the users config directory
+ * return the config directory relative to a users home directory and appends it to the given home directory
+ * @return std::string
+ * @retval the path relative to the users home directory
+ * @param home path the config directory gets appended to
+ */
+const std::string getConfigdir(const std::string& home)
 {
     std::string path;
 #ifdef __WIN32
@@ -17,7 +56,7 @@ std::string getConfigdir(std::string root)
     path = "/.local/share/";
 #endif
 
-    path = root + path + NAME_LOWER;
+    path = home + path + NAME_LOWER;
 
     return path;
 }
@@ -26,6 +65,7 @@ std::string getConfigdir(std::string root)
  * @brief returns the users home directory
  * @return std::string
  * @retval the path to the users home directory
+ * \TODO implement home fetching on windows
  */
 std::string getHomedir()
 {

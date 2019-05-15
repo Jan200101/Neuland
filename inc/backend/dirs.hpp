@@ -5,8 +5,10 @@
 
 namespace Backend
 {
-std::string getConfigdir(std::string = "");
-const std::string getConfigdir(const std::string& root = "");
+int makeDirectory(std::string path);
+int makeConfigdir();
+
+const std::string getConfigdir(const std::string& home = "");
 std::string getHomedir();
 
 } // namespace Backend

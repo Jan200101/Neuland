@@ -78,6 +78,8 @@ int main(int argc, char** argv)
             // \TODO remove
             else if (!std::strcmp(argv[i], "--config"))
             {
+                Backend::makeConfigdir();
+
                 std::string cfgfile = Backend::getConfigdir(Backend::getHomedir()) + "/config.json";
                 std::cout << cfgfile << std::endl;
                 Json::Value k = Config::readConfig(cfgfile);
