@@ -12,7 +12,9 @@ namespace Backend
  * @return int
  * @retval mkdir status code
  * @param path directory that will be created
+ * \todo add check to see if the directory exists
  */
+// TODO add check to see if the directory exists
 int makeDirectory(const char* path)
 {
     return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -25,6 +27,7 @@ int makeDirectory(const char* path)
  * @retval mkdir status code
  * @param path directory that will be created
  */
+// TODO add check to see if the directory exists
 int makeDirectory(std::string path)
 {
     return Backend::makeDirectory(path.c_str());
@@ -65,8 +68,9 @@ const std::string getConfigdir(const std::string& home)
  * @brief returns the users home directory
  * @return std::string
  * @retval the path to the users home directory
- * \TODO implement home fetching on windows
+ * \todo implement home fetching on windows
  */
+// TODO implement home fetching on windows
 std::string getHomedir()
 {
 #ifdef __WIN32
