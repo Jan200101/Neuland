@@ -11,6 +11,13 @@ MOC_DIR         = moc     # build/moc
 
 DEFINES        += QT_DEPRECATED_WARNINGS
 
+*-g++ {
+  GCC_VERSION = $$system("$${QMAKE_CXX} -dumpversion")
+  contains(GCC_VERSION, 9(.[0-9]|)+) {
+    CONFIG += g++9
+  }
+}
+
 QMAKE_CXXFLAGS += \
                -Wall \
                -Wextra \
@@ -21,7 +28,7 @@ QMAKE_CXXFLAGS += \
                -Wpointer-arith \
                -Wunreachable-code \
 
-CONFIG         += c++11
+CONFIG         += c++1z
 
 SOURCES        += \
                src/main.cpp \
@@ -41,6 +48,11 @@ HEADERS        += \
 LIBS           += \
                -ljsoncpp \
                -lncurses \
+
+
+# gcc 9 doesn't need you and can't link the fs standard
+!g++9: LIBS   +=
+               -lstdc++fs \
 
 FORMS          += \
                ui/mainwindow.ui \

@@ -1,7 +1,6 @@
 # GENERAL VARIABLES
 NAME            := $(shell pwd | sed -E "s/.*\/([a-zA-Z0-9_-]*)/\1/")
-STD             := c++11
-
+STD             := c++17
 
 # COMMAND VARIABLES
 RM              := rm -r
@@ -44,6 +43,13 @@ ifeq ($(PLATFORM),WINDOWS)
 endif
 
 
+# GCC VERSION CHECK
+GCC_VER         := $(strip $(shell ${CROSS}$(CXX) -dumpversion 2>&1))
+override GCC_VER_SPLIT := $(subst ., ,$(GCC_VER))
+GCC_MAJOR := $(word 1,$(GCC_VER_SPLIT))
+GCC_MINOR := $(word 2,$(GCC_VER_SPLIT))
+
+
 # DIRECTORIES
 BIN_DIR         := bin
 BUILD_DIR       := build
@@ -72,6 +78,10 @@ INCLUDEFLAGS    := -I${INC_DIR}
 
 LIBS            := `$(CROSS)$(PKG-CONFIG) --libs ncurses` \
                    `$(CROSS)$(PKG-CONFIG) --libs jsoncpp`
+ifneq (9,$(GCC_MAJOR))
+    LIBS        += -lstdc++fs
+endif
+
 BINFLAGS        := $(LIBS)
 
 DEFINES         := -DNO_QT

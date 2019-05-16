@@ -1,4 +1,4 @@
-#include <ncurses.h>
+#include <ncurses/ncurses.h>
 
 #include "defines.hpp"
 #include "frontend/cliinterface.hpp"

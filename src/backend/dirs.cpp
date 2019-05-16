@@ -1,8 +1,11 @@
 #include <sys/stat.h>
 #include <cstdlib>
+#include <filesystem>
 
 #include "backend/dirs.hpp"
 #include "defines.hpp"
+
+namespace fs = std::filesystem;
 
 namespace Backend
 {
@@ -12,33 +15,20 @@ namespace Backend
  * @return int
  * @retval mkdir status code
  * @param path directory that will be created
- * \todo add check to see if the directory exists
  */
-// TODO add check to see if the directory exists
-int makeDirectory(const char* path)
+bool makeDirectory(std::string path)
 {
-    return mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-}
-
-/**
- * @brief creates a directory
- * creates a directory in the given path with the permissions `rwxr-xr-x.`
- * @return int
- * @retval mkdir status code
- * @param path directory that will be created
- */
-// TODO add check to see if the directory exists
-int makeDirectory(std::string path)
-{
-    return Backend::makeDirectory(path.c_str());
+    if (fs::is_directory(path))
+        return true; // same value as create_directory would return when the directory is created
+    return fs::create_directory(path);
 }
 
 /**
  * @brief creates the config directory for the current user
  * @return int
- * @retval mkdir status code
+ * @retval return code of makeDirectory
  */
-int makeConfigdir()
+bool makeConfigdir()
 {
     return Backend::makeDirectory(Backend::getConfigdir(Backend::getHomedir()));
 }
@@ -71,7 +61,7 @@ const std::string getConfigdir(const std::string& home)
  * \todo implement home fetching on windows
  */
 // TODO implement home fetching on windows
-std::string getHomedir()
+const std::string getHomedir()
 {
 #ifdef __WIN32
     return "";
