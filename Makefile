@@ -137,10 +137,10 @@ $(BIN_DIR)/$(NAME)$(OUT_EXT): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)
 	${CROSS}${CXX} -o$@ $^ -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	${CROSS}${CXX} -c -o$@ $< -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
+	${CROSS}${CXX} -c -o$@ $< -std=${STD} ${CXXFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES}
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	${CROSS}${CC} -c -o$@ $< -std=${STD} ${CFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES} $(BINFLAGS)
+	${CROSS}${CC} -c -o$@ $< -std=${STD} ${CFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES}
 
 
 loc:
