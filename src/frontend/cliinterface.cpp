@@ -19,53 +19,54 @@
  */
 WINDOW* createWin(int height, int width, int starty, int startx)
 {
-    WINDOW* local_win;
+    WINDOW* win;
 
-    local_win = newwin(height, width, starty, startx);
-    box(local_win, 0, 0); /* 0, 0 gives default characters 
-                           * for the vertical and horizontal
-                           * lines            */
-    wrefresh(local_win);  /* Show that box        */
+    win = newwin(height, width, starty, startx);
+    box(win, 0, 0); /* 0, 0 gives default characters 
+                     * for the vertical and horizontal
+                     * lines            */
+    wrefresh(win);  /* Show that box        */
 
-    return local_win;
+    return win;
 }
 
 /**
  * @brief makes window invisible and then deletes it
  *
- * @param local_win
+ * @param win
  */
-void destroyWin(WINDOW* local_win)
+void destroyWin(WINDOW* win)
 {
-    wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
-    wrefresh(local_win);
-    delwin(local_win);
+    wrefresh(win);
+    delwin(win);
 }
 
-void createTextbox(WINDOW* win, int starty, int startx, int width, char* string, bool color)
+/**
+ * @brief creates a text box esk object on the screen
+ *
+ * @param win
+ * @param starty
+ * @param startx
+ * @param width
+ * @param color
+ *
+ * \todo make width depend on terminal size
+ */
+void createTextbox(WINDOW* win, int starty, int startx, int width, bool color)
 {
-    int length, temp;
-    int x, y;
+    char* temp = new char[width + 1];
+
+    for (int i = 0; i < width; ++i)
+        temp[i] = ' ';
 
     if (win == nullptr)
         win = stdscr;
 
-    getyx(win, y, x);
-
-    if (startx != 0)
-        x = startx;
-
-    if (starty != 0)
-        y = starty;
-
-    length = std::strlen(string);
-    temp = (width - length) / 2;
-    x += temp;
-
     if (color)
         attron(COLOR_PAIR(TEXTCOLOR));
-    mvwprintw(win, y, x, "%s", string);
+    mvwprintw(win, starty, startx, "%s", temp);
     if (color)
         attroff(COLOR_PAIR(TEXTCOLOR));
 

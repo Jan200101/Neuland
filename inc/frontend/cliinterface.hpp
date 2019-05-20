@@ -5,6 +5,9 @@
  * You can't include NCurses here with QT present
  */
 
+/**
+ * @brief class for the ncurses interface
+ */
 class CliWindow
 {
    private:
