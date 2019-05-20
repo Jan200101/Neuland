@@ -3,6 +3,9 @@
 #include "defines.hpp"
 #include "frontend/cliinterface.hpp"
 
+#define WINCOLOR 1
+#define TEXTCOLOR 2
+
 /**
  * @brief creates ncurses window with given value and returns it
  *
@@ -14,7 +17,7 @@
  * @param starty
  * @param startx
  */
-WINDOW* create_newwin(int height, int width, int starty, int startx)
+WINDOW* createWin(int height, int width, int starty, int startx)
 {
     WINDOW* local_win;
 
@@ -32,12 +35,41 @@ WINDOW* create_newwin(int height, int width, int starty, int startx)
  *
  * @param local_win
  */
-void destroy_win(WINDOW* local_win)
+void destroyWin(WINDOW* local_win)
 {
     wborder(local_win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
     wrefresh(local_win);
     delwin(local_win);
+}
+
+void createTextbox(WINDOW* win, int starty, int startx, int width, char* string, bool color)
+{
+    int length, temp;
+    int x, y;
+
+    if (win == nullptr)
+        win = stdscr;
+
+    getyx(win, y, x);
+
+    if (startx != 0)
+        x = startx;
+
+    if (starty != 0)
+        y = starty;
+
+    length = std::strlen(string);
+    temp = (width - length) / 2;
+    x += temp;
+
+    if (color)
+        attron(COLOR_PAIR(TEXTCOLOR));
+    mvwprintw(win, y, x, "%s", string);
+    if (color)
+        attroff(COLOR_PAIR(TEXTCOLOR));
+
+    refresh();
 }
 
 CliWindow::CliWindow(int argc, char** argv)
@@ -54,36 +86,49 @@ CliWindow::CliWindow(int argc, char** argv)
  */
 int CliWindow::exec()
 {
-    WINDOW* my_win;
+    WINDOW* win;
     int keych;
+
+    bool hasColor;
 
     initscr();
     raw();
     keypad(stdscr, TRUE);
     noecho();
 
+    if ((hasColor = has_colors()) == TRUE)
+    {
+        // init colors
+        start_color();
+        init_pair(WINCOLOR, COLOR_WHITE, COLOR_BLACK);
+        init_pair(TEXTCOLOR, COLOR_BLACK, COLOR_WHITE);
+    }
+
+    // print text in the middle of the head
     mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
     refresh();
 
-    my_win = create_newwin(LINES - 3, COLS - 4, 2, 2);
+    // creates a window thats visually 1 smaller than the terminal
+    win = createWin(LINES - 3, COLS - 4, 2, 2);
     curs_set(0);
 
-    while ((keych = getch()) != KEY_F(1))
+    while ((keych = getch()) != 'q')
     {
         curs_set(0);
         refresh();
         switch (keych)
         {
             case KEY_RESIZE:
-                destroy_win(my_win);
+                destroyWin(win);
 
                 /* Clears title bar */
                 for (int x = 0; x <= 1; ++x)
                     for (int y = 0; y <= COLS; ++y)
                         mvprintw(x, y, " ");
 
+                // print text in the middle of the title
                 mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
-                my_win = create_newwin(LINES - 3, COLS - 4, 2, 2);
+                win = createWin(LINES - 3, COLS - 4, 2, 2);
 
                 break;
         }
