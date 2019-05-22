@@ -3,8 +3,7 @@
 #include "defines.hpp"
 #include "frontend/cliinterface.hpp"
 
-#define WINCOLOR 1
-#define TEXTCOLOR 2
+#define TEXTCOLOR 1
 
 /**
  * @brief creates ncurses window with given value and returns it
@@ -77,6 +76,15 @@ CliWindow::CliWindow(int argc, char** argv)
 {
     this->argc = argc;
     this->argv = argv;
+
+    exitkey = 'q';
+
+    if ((hasColors = has_colors()) == true)
+    {
+        // init colors
+        start_color();
+        init_pair(TEXTCOLOR, COLOR_BLACK, COLOR_WHITE);
+    }
 }
 
 /**
@@ -88,22 +96,15 @@ CliWindow::CliWindow(int argc, char** argv)
 int CliWindow::exec()
 {
     WINDOW* win;
+    WINDOW* list;
+
     int keych;
 
-    bool hasColor;
-
     initscr();
-    raw();
-    keypad(stdscr, TRUE);
-    noecho();
 
-    if ((hasColor = has_colors()) == TRUE)
-    {
-        // init colors
-        start_color();
-        init_pair(WINCOLOR, COLOR_WHITE, COLOR_BLACK);
-        init_pair(TEXTCOLOR, COLOR_BLACK, COLOR_WHITE);
-    }
+    raw();
+    keypad(stdscr, true);
+    noecho();
 
     // print text in the middle of the head
     mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
@@ -111,9 +112,10 @@ int CliWindow::exec()
 
     // creates a window thats visually 1 smaller than the terminal
     win = createWin(LINES - 3, COLS - 4, 2, 2);
+    list = createWin((LINES - 5) / 1.1, COLS - 6, 3, 3);
     curs_set(0);
 
-    while ((keych = getch()) != 'q')
+    while ((keych = getch()) != exitkey)
     {
         curs_set(0);
         refresh();
@@ -130,6 +132,7 @@ int CliWindow::exec()
                 // print text in the middle of the title
                 mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
                 win = createWin(LINES - 3, COLS - 4, 2, 2);
+                list = createWin((LINES - 5) / 1.5, COLS - 6, 3, 3);
 
                 break;
         }

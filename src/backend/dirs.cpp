@@ -2,6 +2,10 @@
 #include <cstdlib>
 #include <filesystem>
 
+#ifdef __WIN32
+#include <shlobj.h>
+#endif
+
 #include "backend/dirs.hpp"
 #include "defines.hpp"
 
@@ -44,7 +48,7 @@ const std::string getConfigdir(const std::string& home)
 {
     std::string path;
 #ifdef __WIN32
-    path = "/.";
+    path = "\\.";
 #elif __unix__
     path = "/.local/share/";
 #endif
@@ -58,13 +62,20 @@ const std::string getConfigdir(const std::string& home)
  * @brief returns the users home directory
  * @return std::string
  * @retval the path to the users home directory
- * \todo implement home fetching on windows
  */
-// TODO implement home fetching on windows
 const std::string getHomedir()
 {
 #ifdef __WIN32
-    return "";
+
+    WCHAR path[MAX_PATH + 1];
+    if (SHGetSpecialFolderPathW(HWND_DESKTOP, path, CSIDL_DESKTOPDIRECTORY, FALSE))
+    {
+        std::wstring ws(path);
+        std::string str(ws.begin(), ws.end());
+        return str;
+    }
+    else
+        return std::getenv("APPDATA");
 
 #elif __unix__
     return std::getenv("HOME");

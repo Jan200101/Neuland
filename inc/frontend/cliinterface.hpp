@@ -14,6 +14,10 @@ class CliWindow
     int argc;
     char** argv;
 
+    bool hasColors;
+
+    char exitkey;
+
    public:
     CliWindow(int argc, char** argv);
 

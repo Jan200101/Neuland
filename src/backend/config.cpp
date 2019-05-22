@@ -32,7 +32,15 @@ Json::Value readConfig(std::string path)
 
     while (file.good() && !isEmpty(file))
     {
-        file >> config;
+        try
+        {
+            file >> config;
+        }
+        catch (Json::RuntimeError& param)
+        {
+            // catches invalid or malformed json
+            std::cout << "Config seems to be malformed" << std::endl;
+        }
     }
 
     return config;
