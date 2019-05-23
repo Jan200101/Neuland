@@ -98,6 +98,8 @@ int CliWindow::exec()
     WINDOW* win;
     WINDOW* list;
 
+    WINDOW* Buttons[3];
+
     int keych;
 
     initscr();
@@ -107,12 +109,18 @@ int CliWindow::exec()
     noecho();
 
     // print text in the middle of the head
-    mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
+    mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME);
     refresh();
 
     // creates a window thats visually 1 smaller than the terminal
     win = createWin(LINES - 3, COLS - 4, 2, 2);
-    list = createWin((LINES - 5) / 1.1, COLS - 6, 3, 3);
+    list = createWin((LINES - 4) * 0.8, COLS - 6, 3, 3);
+
+    Buttons[0] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, 3);
+    Buttons[1] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, COLS - (COLS / 3.5) - 3);
+    Buttons[2] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, COLS - (COLS / 7) - 3);
+    //    Neu Importieren OK
+
     curs_set(0);
 
     while ((keych = getch()) != exitkey)
@@ -123,6 +131,11 @@ int CliWindow::exec()
         {
             case KEY_RESIZE:
                 destroyWin(win);
+                destroyWin(list);
+
+                destroyWin(Buttons[0]);
+                destroyWin(Buttons[1]);
+                destroyWin(Buttons[2]);
 
                 /* Clears title bar */
                 for (int x = 0; x <= 1; ++x)
@@ -130,9 +143,16 @@ int CliWindow::exec()
                         mvprintw(x, y, " ");
 
                 // print text in the middle of the title
-                mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME_UPPER);
+                mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME);
+
+                // creates a window thats visually 1 smaller than the terminal
                 win = createWin(LINES - 3, COLS - 4, 2, 2);
-                list = createWin((LINES - 5) / 1.5, COLS - 6, 3, 3);
+                list = createWin((LINES - 4) * 0.8, COLS - 6, 3, 3);
+
+                Buttons[0] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, 3);
+                Buttons[1] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, COLS - (COLS / 3.5) - 3);
+                Buttons[2] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, COLS - (COLS / 7) - 3);
+                //    Neu Importieren OK
 
                 break;
         }

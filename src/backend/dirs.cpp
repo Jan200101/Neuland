@@ -68,7 +68,7 @@ const std::string getHomedir()
 #ifdef __WIN32
 
     WCHAR path[MAX_PATH + 1];
-    if (SHGetSpecialFolderPathW(HWND_DESKTOP, path, CSIDL_DESKTOPDIRECTORY, FALSE))
+    if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, path)))
     {
         std::wstring ws(path);
         std::string str(ws.begin(), ws.end());
