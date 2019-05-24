@@ -17,6 +17,7 @@
 
 namespace Config
 {
+Json::Value readCard(std::string path);
 Json::Value readConfig(std::string path);
 
 bool writeConfig(Json::Value config, std::string path);

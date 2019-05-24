@@ -38,24 +38,13 @@ bool makeConfigdir()
 }
 
 /**
- * @brief return the users config directory
- * return the config directory relative to a users home directory and appends it to the given home directory
- * @return std::string
- * @retval the path relative to the users home directory
- * @param home path the config directory gets appended to
+ * @brief creates the card directory
+ * @return int
+ * @retval return code of makeDirectory
  */
-const std::string getConfigdir(const std::string& home)
+bool makeCarddir()
 {
-    std::string path;
-#ifdef __WIN32
-    path = "\\.";
-#elif __unix__
-    path = "/.local/share/";
-#endif
-
-    path = home + path + NAME_LOWER;
-
-    return path;
+    return Backend::makeDirectory(Backend::getConfigdir(Backend::getCarddir()));
 }
 
 /**
@@ -81,6 +70,39 @@ const std::string getHomedir()
     return std::getenv("HOME");
 
 #endif
+}
+
+/**
+ * @brief return the users config directory
+ * return the config directory relative to a users home directory and appends it to the given home directory
+ * @return std::string
+ * @retval the path relative to the users home directory
+ * @param home path the config directory gets appended to
+ */
+const std::string getConfigdir(const std::string& home)
+{
+    std::string path;
+#ifdef __WIN32
+    path = "/.";
+#elif __unix__
+    path = "/.local/share/";
+#endif
+
+    path = home + path + NAME_LOWER;
+
+    return path;
+}
+
+/**
+ * @brief return the users card directory
+ * return the card directory relative to a users home directory and appends it to the given home directory
+ * @return std::string
+ * @retval the path relative to the users home directory
+ * @param home path the config directory gets appended to
+ */
+const std::string getCarddir(const std::string& home)
+{
+    return Backend::getConfigdir(home) + "/cards/";
 }
 
 } // namespace Backend

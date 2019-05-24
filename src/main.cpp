@@ -80,8 +80,8 @@ int main(int argc, char** argv)
             {
                 Backend::makeConfigdir();
 
-                std::string cfgfile = Backend::getConfigdir(Backend::getHomedir()) + "/config.json";
-                std::cout << cfgfile << std::endl;
+                std::string cfgfile = Backend::getConfigdir() + "/config.json";
+                std::cout << Backend::getCarddir() << std::endl;
                 Json::Value k = Config::readConfig(cfgfile);
 
                 std::cout << k << std::endl;
