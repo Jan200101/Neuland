@@ -123,11 +123,11 @@ int CliWindow::exec()
 
     // creates a window thats visually 1 smaller than the terminal
     win = createWin(LINES - 3, COLS - 4, 2, 2);
-    list = createWin((LINES - 4) * 0.8, COLS - 6, 3, 3);
+    list = createWin(LINES - 8, COLS - 6, 3, 3);
 
-    Buttons[0] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, 3);
-    Buttons[1] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, 3 + (COLS / 7));
-    Buttons[2] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, COLS - (COLS / 7) - 3);
+    Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
+    Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
+    Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);
     //    Neu Importieren OK
 
     // hide Cursor
@@ -161,11 +161,11 @@ int CliWindow::exec()
 
                 // creates a window thats visually 1 smaller than the terminal
                 win = createWin(LINES - 3, COLS - 4, 2, 2);
-                list = createWin((LINES - 4) * 0.8, COLS - 6, 3, 3);
+                list = createWin(LINES - 8, COLS - 6, 3, 3);
 
-                Buttons[0] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, 3);
-                Buttons[1] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, 3 + (COLS / 7));
-                Buttons[2] = createWin((LINES - 5) * 0.19, (COLS / 7), LINES * 0.8, COLS - (COLS / 7) - 3);
+                Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
+                Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
+                Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);
                 //    Neu Importieren OK
 
                 break;

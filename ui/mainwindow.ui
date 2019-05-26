@@ -52,17 +52,12 @@
       </column>
       <column>
        <property name="text">
-        <string>Erstellungsdatum</string>
+        <string>Karten Anzahl</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Anzahl</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Thema</string>
+        <string>Kategorien</string>
        </property>
       </column>
      </widget>
