@@ -5,9 +5,12 @@
 #include "backend/config.hpp"
 
 /**
- * @brief checks if a input stream is empty
- * @retval bool
- * @return is stream eof
+ * @brief      checks if a input stream is empty
+ * @retval     bool   returns if the stream is going to be empty or not
+ *
+ * @param      pFile  The file
+ *
+ * @return     is stream eof
  */
 bool isEmpty(std::ifstream& pFile)
 {
@@ -17,12 +20,14 @@ bool isEmpty(std::ifstream& pFile)
 namespace Config
 {
 /**
- * @brief reads given config file
- * @retval Json::Value
- * @return parsed config file
- * @param path
+ * @brief      reads given config file
+ * @retval     Json::Value  parsaed file content
  *
- * Reads config file from a given path and returns it parsed
+ * @param      path         The path
+ *
+ *             Reads config file from a given path and returns it parsed
+ *
+ * @return     parsed config file
  */
 Json::Value readConfig(std::string path)
 {

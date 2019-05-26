@@ -20,7 +20,13 @@
 #include "frontend/qtinterface.hpp"
 
 /**
- * @brief function that initializes and executes the graphical (Qt5) interface
+ * @brief      function that initializes and executes the graphical (Qt5)
+ *             interface
+ *
+ * @param      argc  The argc
+ * @param      argv  The argv
+ *
+ * @return     returns the program exit code
  */
 int rungraphical(int& argc, char** argv)
 {
@@ -33,7 +39,13 @@ int rungraphical(int& argc, char** argv)
 #endif
 
 /**
- * @brief function that initializes and executes the commandline (ncurses) interface
+ * @brief      function that initializes and executes the commandline (ncurses)
+ *             interface
+ *
+ * @param      argc  The argc
+ * @param      argv  The argv
+ *
+ * @return     returns the program exit code
  */
 int runcli(int& argc, char** argv)
 {

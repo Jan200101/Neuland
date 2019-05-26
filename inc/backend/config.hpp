@@ -6,6 +6,7 @@
 /*
 {
     "lastedited":"UNIXTIME",
+}
 
 {
 	"categories": ["categorie", "categorie"],

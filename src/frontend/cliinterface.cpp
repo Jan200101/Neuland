@@ -8,15 +8,15 @@
 #define TITLECOLOR 2
 
 /**
- * @brief creates ncurses window with given value and returns it
+ * @brief      creates ncurses window with given value and returns it
  *
- * @return WINDOW*
- * @retval returns freshly allocated WINDOW pointer
+ * @param      height   The height
+ * @param      width    The width
+ * @param      starty   The starty
+ * @param      startx   The startx
  *
- * @param height
- * @param width
- * @param starty
- * @param startx
+ * @return     WINDOW*
+ * @retval     returns  freshly allocated WINDOW pointer
  */
 WINDOW* createWin(int height, int width, int starty, int startx)
 {
@@ -32,9 +32,9 @@ WINDOW* createWin(int height, int width, int starty, int startx)
 }
 
 /**
- * @brief makes window invisible and then deletes it
+ * @brief      makes window invisible and then deletes it
  *
- * @param win
+ * @param      win   The window
  */
 void destroyWin(WINDOW* win)
 {
@@ -45,15 +45,15 @@ void destroyWin(WINDOW* win)
 }
 
 /**
- * @brief creates a text box esk object on the screen
+ * @brief      creates a text box esk object on the screen
  *
- * @param win
- * @param starty
- * @param startx
- * @param width
- * @param color
+ * @param      win     The window
+ * @param      starty  The starty
+ * @param      startx  The startx
+ * @param      width   The width
+ * @param      color   The color
  *
- * \todo make width depend on terminal size
+ * @todo       make width depend on terminal size
  */
 void createTextbox(WINDOW* win, int starty, int startx, int width, bool color)
 {
@@ -85,10 +85,10 @@ CliWindow::CliWindow(int argc, char** argv)
 }
 
 /**
- * @brief main interface loop
+ * @brief      main interface loop
  *
- * @return int
- * @retval returns status code
+ * @return     int
+ * @retval     returns  status code
  */
 int CliWindow::exec()
 {

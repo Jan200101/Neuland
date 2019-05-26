@@ -5,7 +5,6 @@
 
 #define NAME "Neuland"
 
-// \TODO implement upper and lower converstion at compile time
 #define NAME_UPPER "NEULAND"
 #define NAME_LOWER "neuland"
 

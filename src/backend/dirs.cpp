@@ -14,11 +14,13 @@ namespace fs = std::filesystem;
 namespace Backend
 {
 /**
- * @brief creates a directory
- * creates a directory in the given path with the permissions `rwxr-xr-x.`
- * @return int
- * @retval mkdir status code
- * @param path directory that will be created
+ * @brief      creates a directory creates a directory in the given path with
+ *             the permissions `rwxr-xr-x.`
+ *
+ * @param      path   directory that will be created
+ *
+ * @return     int
+ * @retval     mkdir  status code
  */
 bool makeDirectory(std::string path)
 {
@@ -36,9 +38,10 @@ bool makeDirectory(std::string path)
 }
 
 /**
- * @brief creates the config directory for the current user
- * @return int
- * @retval return code of makeDirectory
+ * @brief      creates the config directory for the current user
+ *
+ * @return     int
+ * @retval     return  code of makeDirectory
  */
 bool makeConfigdir()
 {
@@ -46,9 +49,10 @@ bool makeConfigdir()
 }
 
 /**
- * @brief creates the card directory
- * @return int
- * @retval return code of makeDirectory
+ * @brief      creates the card directory
+ *
+ * @return     int
+ * @retval     return  code of makeDirectory
  */
 bool makeCarddir()
 {
@@ -56,9 +60,10 @@ bool makeCarddir()
 }
 
 /**
- * @brief returns the users home directory
- * @return std::string
- * @retval the path to the users home directory
+ * @brief      returns the users home directory
+ *
+ * @return     std::string
+ * @retval     the   path to the users home directory
  */
 const std::string getHomedir()
 {
@@ -81,11 +86,14 @@ const std::string getHomedir()
 }
 
 /**
- * @brief return the users config directory
- * return the config directory relative to a users home directory and appends it to the given home directory
- * @return std::string
- * @retval the path relative to the users home directory
- * @param home path the config directory gets appended to
+ * @brief      return the users config directory return the config directory
+ *             relative to a users home directory and appends it to the given
+ *             home directory
+ *
+ * @param      home  path the config directory gets appended to
+ *
+ * @return     std::string
+ * @retval     the   path relative to the users home directory
  */
 const std::string getConfigdir(const std::string& home)
 {

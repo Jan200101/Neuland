@@ -6,7 +6,7 @@
  */
 
 /**
- * @brief class for the ncurses interface
+ * @brief      class for the ncurses interface
  */
 class CliWindow
 {
