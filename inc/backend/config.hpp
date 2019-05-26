@@ -6,12 +6,18 @@
 /*
 {
     "lastedited":"UNIXTIME",
-    "cards": [
-        {
-            "name":"Englisch",
-            "categories":["sprachen","englisch"]
-        },
-    ]
+
+{
+	"categories": ["categorie", "categorie"],
+	"cards": [
+		{
+			"question": "<question>",
+			"answers": {
+				"right": ["right answer"],
+				"false": ["false answer"]
+			}
+		}
+	]
 }
  */
 

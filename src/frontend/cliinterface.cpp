@@ -94,7 +94,6 @@ int CliWindow::exec()
 {
     WINDOW* win;
     WINDOW* list;
-    MEVENT event;
 
     WINDOW* Buttons[3];
 

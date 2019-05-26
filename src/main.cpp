@@ -79,12 +79,16 @@ int main(int argc, char** argv)
             else if (!std::strcmp(argv[i], "--config"))
             {
                 Backend::makeConfigdir();
+                Backend::makeCarddir();
 
                 std::string cfgfile = Backend::getConfigdir() + "/config.json";
-                std::cout << Backend::getCarddir() << std::endl;
+                std::cout << Backend::getConfigdir() << std::endl
+                          << Backend::getCarddir() << std::endl;
                 Json::Value k = Config::readConfig(cfgfile);
 
                 std::cout << k << std::endl;
+
+                terminate = true;
             }
             // \TODO remove
             else if (!std::strcmp(argv[i], "--norun"))

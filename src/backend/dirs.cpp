@@ -24,7 +24,15 @@ bool makeDirectory(std::string path)
 {
     if (fs::is_directory(path))
         return true; // same value as create_directory would return when the directory is created
-    return fs::create_directory(path);
+
+    try
+    {
+        return fs::create_directory(path);
+    }
+    catch (std::filesystem::__cxx11::filesystem_error& e) // catch various fs errors (like the parent not existing)
+    {
+        return false;
+    }
 }
 
 /**
@@ -34,7 +42,7 @@ bool makeDirectory(std::string path)
  */
 bool makeConfigdir()
 {
-    return Backend::makeDirectory(Backend::getConfigdir(Backend::getHomedir()));
+    return Backend::makeDirectory(Backend::getConfigdir());
 }
 
 /**
@@ -44,7 +52,7 @@ bool makeConfigdir()
  */
 bool makeCarddir()
 {
-    return Backend::makeDirectory(Backend::getConfigdir(Backend::getCarddir()));
+    return Backend::makeDirectory(Backend::getCarddir());
 }
 
 /**
