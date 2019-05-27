@@ -70,9 +70,11 @@ int main(int argc, char** argv)
                           << "\nOptions:"
                              "\n  --help                     Shows this message"
 #ifndef NO_QT
-                             "\n  --graphical                Uses a graphical interface"
+                             "\n  --graphical                Uses a Qt5 based interface"
 #endif
-                             "\n  --cli                      Uses a CLI interface"
+                             "\n  --cli                      Uses a curses based interface"
+                             "\n  --debug                    show various information"
+                             "\n  --dry-run                  don't actually run the program"
                           << std::endl;
 
                 terminate = true;
@@ -87,11 +89,11 @@ int main(int argc, char** argv)
             {
                 app = runcli;
             }
-            // \TODO remove
-            else if (!std::strcmp(argv[i], "--config"))
+            else if (!std::strcmp(argv[i], "--debug"))
             {
                 Backend::makeConfigdir();
                 Backend::makeCarddir();
+                Backend::makeConfigfile();
 
                 std::string cfgfile = Backend::getConfigdir() + "/config.json";
                 std::cout << Backend::getConfigdir() << std::endl
@@ -100,10 +102,10 @@ int main(int argc, char** argv)
 
                 std::cout << k << std::endl;
 
-                terminate = true;
+                for (auto p : Backend::listCarddir())
+                    std::cout << p.path() << '\n';
             }
-            // \TODO remove
-            else if (!std::strcmp(argv[i], "--norun"))
+            else if (!std::strcmp(argv[i], "--dry-run"))
             {
                 terminate = true;
             }

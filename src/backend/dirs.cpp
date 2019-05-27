@@ -1,6 +1,6 @@
 #include <sys/stat.h>
 #include <cstdlib>
-#include <filesystem>
+#include <fstream>
 
 #ifdef __WIN32
 #include <shlobj.h>
@@ -9,10 +9,40 @@
 #include "backend/dirs.hpp"
 #include "defines.hpp"
 
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;
 
 namespace Backend
 {
+/**
+ * @brief      opens a output file stream and returns the good status
+ *
+ * @param      path   path to the file that will be created
+ *
+ * @return     bool
+ */
+bool makeFile(std::string path)
+{
+    bool good;
+
+    std::ofstream file(path);
+    good = file.good();
+    file.close();
+
+    return good;
+}
+
+/**
+ * @brief      calls Backend::makeFile onto a file in the config directory
+ *
+ * @param      filename   name of the file thats going to be created
+ *
+ * @return     bool
+ */
+bool makeConfigfile(const std::string& filename)
+{
+    return Backend::makeFile(Backend::getConfigdir() + "/" + filename);
+}
+
 /**
  * @brief      creates a directory creates a directory in the given path with
  *             the permissions `rwxr-xr-x.`
@@ -20,9 +50,8 @@ namespace Backend
  * @param      path   directory that will be created
  *
  * @return     int
- * @retval     mkdir  status code
  */
-bool makeDirectory(std::string path)
+bool makeDirectory(const std::string& path)
 {
     if (fs::is_directory(path))
         return true; // same value as create_directory would return when the directory is created
@@ -31,7 +60,7 @@ bool makeDirectory(std::string path)
     {
         return fs::create_directory(path);
     }
-    catch (std::filesystem::__cxx11::filesystem_error& e) // catch various fs errors (like the parent not existing)
+    catch (fs::__cxx11::filesystem_error& e) // catch various fs errors (like the parent not existing)
     {
         return false;
     }
@@ -41,7 +70,6 @@ bool makeDirectory(std::string path)
  * @brief      creates the config directory for the current user
  *
  * @return     int
- * @retval     return  code of makeDirectory
  */
 bool makeConfigdir()
 {
@@ -63,7 +91,6 @@ bool makeCarddir()
  * @brief      returns the users home directory
  *
  * @return     std::string
- * @retval     the   path to the users home directory
  */
 const std::string getHomedir()
 {
@@ -93,7 +120,6 @@ const std::string getHomedir()
  * @param      home  path the config directory gets appended to
  *
  * @return     std::string
- * @retval     the   path relative to the users home directory
  */
 const std::string getConfigdir(const std::string& home)
 {
@@ -110,15 +136,32 @@ const std::string getConfigdir(const std::string& home)
 }
 
 /**
- * @brief return the users card directory
- * return the card directory relative to a users home directory and appends it to the given home directory
- * @return std::string
- * @retval the path relative to the users home directory
- * @param home path the config directory gets appended to
+ * @brief      return the users card directory
+ *             return the card directory relative to a users home directory
+ *             and appends it to the given home directory
+ *
+ * @return     std::string
+ *
+ * @param      home path the config directory gets appended to
  */
 const std::string getCarddir(const std::string& home)
 {
     return Backend::getConfigdir(home) + "/cards/";
+}
+
+const fs::directory_iterator listDirectory(const std::string& path)
+{
+    return fs::directory_iterator(path);
+}
+
+const fs::directory_iterator listConfigdir()
+{
+    return Backend::listDirectory(Backend::getConfigdir());
+}
+
+const fs::directory_iterator listCarddir()
+{
+    return Backend::listDirectory(Backend::getCarddir());
 }
 
 } // namespace Backend
