@@ -4,6 +4,7 @@ STD             := c++17
 
 # COMMAND VARIABLES
 RM              := rm -r
+RMDIR           := rmdir
 MKDIR           := mkdir -p
 DOXYGEN         := doxygen
 QMAKE           := qmake-qt5
@@ -147,6 +148,16 @@ loc:
 	-find ${SRC_DIR} ${INC_DIR} -name '*.cpp' -o -name '*.c' -o -name '*.h' -o -name '*.hpp' -type f | xargs wc -l
 
 
+install:
+	@test -d /opt/${NAME}/bin || mkdir -p /opt/${NAME}/bin
+	install -m 755 -p -s bin/${NAME}$${OUT_EXT} /opt/${NAME}/bin
+	@echo Installed
+
+uninstall:
+	-@$(RM) -rf /opt/Neuland/bin/
+	-@$(RMDIR) /opt/Neuland
+	@echo Uninstalled
+
 # TAR
 tar: $(NAME).tar
 
@@ -154,4 +165,4 @@ $(NAME).tar:
 	tar -cf $@ ${FILES};
 
 
-.PHONY: default graphical cli clean docs loc tar
+.PHONY: default graphical cli clean docs loc install uninstall tar

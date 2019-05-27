@@ -8,7 +8,7 @@ namespace fs = std::filesystem;
 
 namespace Backend
 {
-bool makeFile(std::string path);
+bool makeFile(const std::string& path);
 bool makeConfigfile(const std::string& filename = "config.json");
 
 bool makeDirectory(const std::string& path);

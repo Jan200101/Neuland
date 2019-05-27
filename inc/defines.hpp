@@ -8,6 +8,6 @@
 #define NAME_UPPER "NEULAND"
 #define NAME_LOWER "neuland"
 
-constexpr short NAME_LENGTH = std::strlen(NAME);
+constexpr auto NAME_LENGTH = std::strlen(NAME);
 
 #endif

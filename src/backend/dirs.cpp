@@ -1,6 +1,11 @@
+//#include <json/json.h>
 #include <sys/stat.h>
 #include <cstdlib>
+//#include <ctime>
 #include <fstream>
+
+// @todo remove
+#include <iostream>
 
 #ifdef __WIN32
 #include <shlobj.h>
@@ -8,8 +13,6 @@
 
 #include "backend/dirs.hpp"
 #include "defines.hpp"
-
-//namespace fs = std::filesystem;
 
 namespace Backend
 {
@@ -20,12 +23,19 @@ namespace Backend
  *
  * @return     bool
  */
-bool makeFile(std::string path)
+bool makeFile(const std::string& path)
 {
     bool good;
 
     std::ofstream file(path);
-    good = file.good();
+
+    if ((good = file.good()))
+    {
+        // @todo remove debug print
+        std::cout << __FILE__ << ":" << __LINE__ << " TODO" << std::endl;
+        // @todo properly use empty json writer
+    }
+
     file.close();
 
     return good;
@@ -45,7 +55,6 @@ bool makeConfigfile(const std::string& filename)
 
 /**
  * @brief      creates a directory creates a directory in the given path with
- *             the permissions `rwxr-xr-x.`
  *
  * @param      path   directory that will be created
  *
@@ -80,7 +89,6 @@ bool makeConfigdir()
  * @brief      creates the card directory
  *
  * @return     int
- * @retval     return  code of makeDirectory
  */
 bool makeCarddir()
 {
@@ -140,9 +148,9 @@ const std::string getConfigdir(const std::string& home)
  *             return the card directory relative to a users home directory
  *             and appends it to the given home directory
  *
- * @return     std::string
- *
  * @param      home path the config directory gets appended to
+ *
+ * @return     std::string
  */
 const std::string getCarddir(const std::string& home)
 {

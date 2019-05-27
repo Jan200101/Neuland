@@ -52,8 +52,6 @@ void destroyWin(WINDOW* win)
  * @param      startx  The startx
  * @param      width   The width
  * @param      color   The color
- *
- * @todo       make width depend on terminal size
  */
 void createTextbox(WINDOW* win, int starty, int startx, int width, bool color)
 {
