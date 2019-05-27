@@ -102,8 +102,8 @@ int main(int argc, char** argv)
 
                 std::cout << k << std::endl;
 
-                for (auto p : Backend::listCarddir())
-                    std::cout << p.path() << '\n';
+                for (auto& p : Backend::listCarddir())
+                    std::cout << p.path().stem().string() << '\n';
             }
             else if (!std::strcmp(argv[i], "--dry-run"))
             {

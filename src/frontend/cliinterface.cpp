@@ -1,6 +1,7 @@
 #include <ncurses/ncurses.h>
 #include <iostream>
 
+#include "backend/dirs.hpp"
 #include "defines.hpp"
 #include "frontend/cliinterface.hpp"
 
@@ -95,7 +96,7 @@ int CliWindow::exec()
 
     WINDOW* Buttons[3];
 
-    int keych;
+    int keych, textpos;
 
     initscr();
 
@@ -122,6 +123,17 @@ int CliWindow::exec()
     // creates a window thats visually 1 smaller than the terminal
     win = createWin(LINES - 3, COLS - 4, 2, 2);
     list = createWin(LINES - 8, COLS - 6, 3, 3);
+
+    // print file names
+
+    textpos = 0;
+
+    for (auto& p : Backend::listCarddir())
+    {
+        if ((3 + textpos++) > LINES - 8)
+            break;
+        mvprintw(3 + textpos, 6, "%s", p.path().stem().c_str());
+    }
 
     Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
     Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
@@ -160,6 +172,16 @@ int CliWindow::exec()
                 // creates a window thats visually 1 smaller than the terminal
                 win = createWin(LINES - 3, COLS - 4, 2, 2);
                 list = createWin(LINES - 8, COLS - 6, 3, 3);
+
+                // print file names
+
+                textpos = 0;
+                for (auto& p : Backend::listCarddir())
+                {
+                    if ((3 + textpos++) > LINES - 8)
+                        break;
+                    mvprintw(3 + textpos, 6, "%s", p.path().stem().c_str());
+                }
 
                 Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
                 Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
