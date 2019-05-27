@@ -1,11 +1,8 @@
 //#include <json/json.h>
 #include <sys/stat.h>
-#include <cstdlib>
-//#include <ctime>
+//#include <cstdlib>
+#include <ctime>
 #include <fstream>
-
-// @todo remove
-#include <iostream>
 
 #ifdef __WIN32
 #include <shlobj.h>
@@ -25,20 +22,11 @@ namespace Backend
  */
 bool makeFile(const std::string& path)
 {
-    bool good;
+    std::ofstream file;
 
-    std::ofstream file(path);
+    file.open(path, std::ios::app); // append so the contents don't get overwritten
 
-    if ((good = file.good()))
-    {
-        // @todo remove debug print
-        std::cout << __FILE__ << ":" << __LINE__ << " TODO" << std::endl;
-        // @todo properly use empty json writer
-    }
-
-    file.close();
-
-    return good;
+    return file.good();
 }
 
 /**

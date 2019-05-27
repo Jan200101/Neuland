@@ -44,7 +44,7 @@ Json::Value readConfig(std::string path)
         catch (Json::RuntimeError& param)
         {
             // catches invalid or malformed json
-            std::cout << "Config seems to be malformed" << std::endl;
+            std::cerr << "Config seems to be malformed" << std::endl;
         }
     }
 

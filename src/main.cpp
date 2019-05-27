@@ -59,13 +59,6 @@ int main(int argc, char** argv)
     // assign a standard function to call for the app for later reassignment
     int (*app)(int&, char**) = DEFAULTINTERFACE;
 
-    std::cerr << argc << std::endl;
-
-    for (int i = 0; i < argc; ++i)
-    {
-        std::cout << argv[i] << std::endl;
-    }
-
     if (argc > 1)
     {
         bool terminate = false;
