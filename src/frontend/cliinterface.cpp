@@ -17,7 +17,6 @@
  * @param      startx   The startx
  *
  * @return     WINDOW*
- * @retval     returns  freshly allocated WINDOW pointer
  */
 WINDOW* createWin(int height, int width, int starty, int startx)
 {
@@ -39,6 +38,9 @@ WINDOW* createWin(int height, int width, int starty, int startx)
  */
 void destroyWin(WINDOW* win)
 {
+    if (win == nullptr)
+        return;
+
     wborder(win, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
     wrefresh(win);
@@ -91,12 +93,16 @@ CliWindow::CliWindow(int argc, char** argv)
  */
 int CliWindow::exec()
 {
-    WINDOW* win;
-    WINDOW* list;
+    WINDOW* win = nullptr;
+    WINDOW* list = nullptr;
 
-    WINDOW* Buttons[3];
+    WINDOW* Buttons[3] = {
+        nullptr,
+        nullptr,
+        nullptr,
+    };
 
-    int keych, textpos;
+    int keych;
 
     initscr();
 
@@ -111,103 +117,76 @@ int CliWindow::exec()
     keypad(stdscr, true);
     noecho();
 
-    // print text in the middle of the head
-    if (hasColors)
-        attron(COLOR_PAIR(TITLECOLOR));
-    mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME);
-    if (hasColors)
-        attroff(COLOR_PAIR(TITLECOLOR));
-
-    refresh();
-
-    // creates a window thats visually 1 smaller than the terminal
-    win = createWin(LINES - 3, COLS - 4, 2, 2);
-    list = createWin(LINES - 8, COLS - 6, 3, 3);
-
-    // print file names
-
-    textpos = 0;
-
-    for (auto& p : Backend::listCarddir())
-    {
-        if ((3 + textpos++) > LINES - 8)
-            break;
-        mvprintw(3 + textpos, 6, "%s", p.path().stem().c_str());
-    }
-
-    Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
-    Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
-    Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);
-    //    Neu Importieren OK
-
     // hide Cursor
     curs_set(0);
 
-    while ((keych = getch()) != exitkey)
+    do
     {
+        static short cursorpos = 0;
+
         switch (keych)
         {
             case KEY_RESIZE:
-                destroyWin(win);
-                destroyWin(list);
-
-                destroyWin(Buttons[0]);
-                destroyWin(Buttons[1]);
-                destroyWin(Buttons[2]);
-
-                /* Clears title bar */
-                for (int x = 0; x <= 1; ++x)
-                    for (int y = 0; y <= COLS; ++y)
-                        mvprintw(x, y, " ");
-
-                // print text in the middle of the head
-                if (hasColors)
-                    attron(COLOR_PAIR(TITLECOLOR));
-                mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME);
-                if (hasColors)
-                    attroff(COLOR_PAIR(TITLECOLOR));
-
-                refresh();
-
-                // creates a window thats visually 1 smaller than the terminal
-                win = createWin(LINES - 3, COLS - 4, 2, 2);
-                list = createWin(LINES - 8, COLS - 6, 3, 3);
-
-                // print file names
-
-                textpos = 0;
-                for (auto& p : Backend::listCarddir())
-                {
-                    if ((3 + textpos++) > LINES - 8)
-                        break;
-                    mvprintw(3 + textpos, 6, "%s", p.path().stem().c_str());
-                }
-
-                Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
-                Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
-                Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);
-                //    Neu Importieren OK
-
                 break;
 
             case KEY_UP:
-                printw("UP");
-                break;
-
-            case KEY_LEFT:
-                printw("LEFT");
-                break;
-
-            case KEY_RIGHT:
-                printw("RIGHT");
+                if (--cursorpos < 0)
+                    ++cursorpos;
                 break;
 
             case KEY_DOWN:
-                printw("DOWN");
+                if (++cursorpos < 0)
+                    --cursorpos;
                 break;
         }
+
+        destroyWin(win);
+        destroyWin(list);
+
+        destroyWin(Buttons[0]);
+        destroyWin(Buttons[1]);
+        destroyWin(Buttons[2]);
+
+        /* Clears title bar */
+        for (int x = 0; x <= 1; ++x)
+            for (int y = 0; y <= COLS; ++y)
+                mvprintw(x, y, " ");
+
+        // print text in the middle of the head
+        if (hasColors)
+            attron(COLOR_PAIR(TITLECOLOR));
+        mvprintw(1, COLS / 2 - NAME_LENGTH / 2, "%s", NAME);
+        if (hasColors)
+            attroff(COLOR_PAIR(TITLECOLOR));
+
         refresh();
-    }
+
+        // creates a window thats visually 1 smaller than the terminal
+        win = createWin(LINES - 3, COLS - 4, 2, 2);
+        list = createWin(LINES - 8, COLS - 6, 3, 3);
+
+        // print file names
+
+        short textpos = 0;
+        mvprintw(1, 1, "%i", cursorpos);
+        for (auto& p : Backend::listCarddir())
+        {
+            if ((3 + textpos++) > LINES - 8)
+                break;
+            if (cursorpos + 1 == textpos)
+                mvprintw(3 + textpos, 5, "*");
+            else
+                mvprintw(3 + textpos, 5, " ");
+            mvprintw(3 + textpos, 6, "%s", p.path().stem().c_str());
+        }
+
+        Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
+        Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
+        Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);
+        //    Neu Importieren OK
+
+        refresh();
+    } while ((keych = getch()) != exitkey);
 
     endwin(); /* End curses mode		  */
     return 0;
