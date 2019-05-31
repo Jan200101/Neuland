@@ -102,7 +102,8 @@ int CliWindow::exec()
         nullptr,
     };
 
-    int keych;
+    short cursorpos = 0;
+    int keych = 0;
 
     initscr();
 
@@ -122,13 +123,8 @@ int CliWindow::exec()
 
     do
     {
-        static short cursorpos = 0;
-
         switch (keych)
         {
-            case KEY_RESIZE:
-                break;
-
             case KEY_UP:
                 if (--cursorpos < 0)
                     ++cursorpos;
@@ -140,6 +136,7 @@ int CliWindow::exec()
                 break;
         }
 
+        // cleanup all Windows
         destroyWin(win);
         destroyWin(list);
 
@@ -168,18 +165,21 @@ int CliWindow::exec()
         // print file names
 
         short textpos = 0;
-        mvprintw(1, 1, "%i", cursorpos);
+
         for (auto& p : Backend::listCarddir())
         {
             if ((3 + textpos++) > LINES - 8)
                 break;
             if (cursorpos + 1 == textpos)
+            {
+                attron(A_BOLD);
                 mvprintw(3 + textpos, 5, "*");
-            else
-                mvprintw(3 + textpos, 5, " ");
-            mvprintw(3 + textpos, 6, "%s", p.path().stem().c_str());
+                attroff(A_BOLD);
+            }
+            mvprintw(3 + textpos, 7, "%s", p.path().stem().c_str());
         }
 
+        // Windows are used for the Buttons because they give it a "button" feel
         Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
         Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
         Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);

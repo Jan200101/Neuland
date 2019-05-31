@@ -24,10 +24,13 @@
 
 namespace Config
 {
-Json::Value readCard(std::string path);
-Json::Value readConfig(std::string path);
+Json::Value readConfig();
+Json::Value readCard(std::string name);
 
-bool writeConfig(Json::Value config, std::string path);
+bool writeConfig(Json::Value config);
+bool writeCard(std::string name, Json::Value card);
+
+bool createDefaultConfig(std::string path);
 } // namespace Config
 
 #endif

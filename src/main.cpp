@@ -95,15 +95,14 @@ int main(int argc, char** argv)
                 Backend::makeCarddir();
                 Backend::makeConfigfile();
 
-                std::string cfgfile = Backend::getConfigdir() + "/config.json";
                 std::cout << Backend::getConfigdir() << std::endl
                           << Backend::getCarddir() << std::endl;
-                Json::Value k = Config::readConfig(cfgfile);
+                Json::Value k = Config::readConfig();
 
                 std::cout << k << std::endl;
 
                 for (auto& p : Backend::listCarddir())
-                    std::cout << p.path().stem().string() << '\n';
+                    std::cout << p.path().string() << '\n';
             }
             else if (!std::strcmp(argv[i], "--dry-run"))
             {

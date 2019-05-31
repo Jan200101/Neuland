@@ -1,8 +1,9 @@
 #include <cstring>
 #include <fstream>
-
 #include <iostream>
+
 #include "backend/config.hpp"
+#include "backend/dirs.hpp"
 
 /**
  * @brief      checks if a input stream is empty
@@ -23,19 +24,20 @@ namespace Config
  * @brief      reads given config file
  * @retval     Json::Value  parsaed file content
  *
- * @param      path         The path
- *
- *             Reads config file from a given path and returns it parsed
+ *             Reads config file and returns it parsed
+ *             if any error occures it prints to cerr and returns an empty Json
  *
  * @return     parsed config file
+ * 
+ * @todo       use jsoncpp reader
  */
-Json::Value readConfig(std::string path)
+Json::Value readConfig()
 {
     Json::Value config;
 
-    std::ifstream file(path.c_str());
+    std::ifstream file((Backend::getConfigdir() + "/config.json").c_str());
 
-    while (file.good() && !isEmpty(file))
+    if (file.good() && !isEmpty(file))
     {
         try
         {
@@ -50,4 +52,30 @@ Json::Value readConfig(std::string path)
 
     return config;
 }
+
+/**
+ * @brief      writes to the config file
+ * @retval     bool  true if config was written to file 
+ *
+ * @retval     config        config taht needs saving
+ *
+ *             writes the given json object to the config file and returns if it did so successfully
+ *
+ * @return     return status
+ * 
+ * @todo       use jsoncpp writer
+ */
+bool writeConfig(Json::Value config)
+{
+    std::ofstream file((Backend::getConfigdir() + "/config.json").c_str());
+
+    if (file.good())
+    {
+        file << config;
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace Config
