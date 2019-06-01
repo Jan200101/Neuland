@@ -35,6 +35,7 @@ SOURCES        += \
                src/frontend/qtinterface.cpp \
                src/frontend/cliinterface.cpp \
                src/backend/config.cpp \
+               src/backend/files.cpp \
                src/backend/dirs.cpp \
 
 HEADERS        += \
@@ -43,6 +44,7 @@ HEADERS        += \
                inc/frontend/qtinterface.hpp \
                inc/frontend/cliinterface.hpp \
                inc/backend/config.hpp \
+               inc/backend/files.hpp \
                inc/backend/dirs.hpp \
 
 LIBS           += \

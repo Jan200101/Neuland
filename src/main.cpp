@@ -9,6 +9,7 @@
 
 #include "backend/config.hpp"
 #include "backend/dirs.hpp"
+#include "backend/files.hpp"
 
 #ifndef NO_QT
 #define DEFAULTINTERFACE rungraphical
@@ -60,6 +61,18 @@ int main(int argc, char** argv)
     // assign a standard function to call for the app for later reassignment
     int (*app)(int&, char**) = DEFAULTINTERFACE;
 
+    // create environment needed
+    Backend::makeConfigdir();
+    Backend::makeCarddir();
+    Backend::makeConfigfile();
+
+    // update lastrun value in config
+    {
+        Json::Value config = Config::readConfig();
+        config["lastrun"] = time(nullptr);
+        Config::writeConfig(config);
+    }
+
     if (argc > 1)
     {
         bool terminate = false;
@@ -92,10 +105,6 @@ int main(int argc, char** argv)
             }
             else if (!std::strcmp(argv[i], "--debug"))
             {
-                Backend::makeConfigdir();
-                Backend::makeCarddir();
-                Backend::makeConfigfile();
-
                 std::cout << Backend::getConfigdir() << std::endl
                           << Backend::getCarddir() << std::endl;
                 Json::Value k = Config::readConfig();

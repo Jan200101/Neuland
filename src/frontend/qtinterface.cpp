@@ -1,5 +1,5 @@
 #ifndef NO_QT
-#include <ctime>
+#include <json/json.h>
 
 #include "frontend/qtinterface.hpp"
 #include "ui_mainwindow.h"
@@ -14,9 +14,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
 
     config = Config::readConfig();
 
-    config["lastrun"] = time(nullptr);
-
-    Config::writeConfig(config);
+    Json::Value card;
 
     for (auto& p : Backend::listCarddir())
         addRow(p.path().stem().string(), "", "");

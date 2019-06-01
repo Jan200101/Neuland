@@ -1,11 +1,12 @@
 #include <ncurses/ncurses.h>
-#include <ctime>
 #include <iostream>
+
+#include "defines.hpp"
+
+#include "frontend/cliinterface.hpp"
 
 #include "backend/config.hpp"
 #include "backend/dirs.hpp"
-#include "defines.hpp"
-#include "frontend/cliinterface.hpp"
 
 #define TEXTCOLOR 1
 #define TITLECOLOR 2
@@ -85,10 +86,6 @@ CliWindow::CliWindow(int argc, char** argv)
     exitkey = 'q';
 
     config = Config::readConfig();
-
-    config["lastrun"] = time(nullptr);
-
-    Config::writeConfig(config);
 
     hasColors = true;
 }
