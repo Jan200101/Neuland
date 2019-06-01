@@ -16,7 +16,7 @@ namespace Backend
 /**
  * @brief      opens a output file stream and returns the good status
  *
- * @param      path   path to the file that will be created
+ * @param[in]  path  path to the file that will be created
  *
  * @return     bool
  */
@@ -32,7 +32,7 @@ bool makeFile(const std::string& path)
 /**
  * @brief      calls Backend::makeFile onto a file in the config directory
  *
- * @param      filename   name of the file thats going to be created
+ * @param[in]  filename  name of the file thats going to be created
  *
  * @return     bool
  */
@@ -44,7 +44,7 @@ bool makeConfigfile(const std::string& filename)
 /**
  * @brief      creates a directory creates a directory in the given path with
  *
- * @param      path   directory that will be created
+ * @param[in]  path  directory that will be created
  *
  * @return     int
  */
@@ -113,7 +113,7 @@ const std::string getHomedir()
  *             relative to a users home directory and appends it to the given
  *             home directory
  *
- * @param      home  path the config directory gets appended to
+ * @param[in]  home  path the config directory gets appended to
  *
  * @return     std::string
  */
@@ -132,11 +132,11 @@ const std::string getConfigdir(const std::string& home)
 }
 
 /**
- * @brief      return the users card directory
- *             return the card directory relative to a users home directory
- *             and appends it to the given home directory
+ * @brief      return the users card directory return the card directory
+ *             relative to a users home directory and appends it to the given
+ *             home directory
  *
- * @param      home path the config directory gets appended to
+ * @param[in]  home  path the config directory gets appended to
  *
  * @return     std::string
  */

@@ -25,10 +25,10 @@
 namespace Config
 {
 Json::Value readConfig();
-Json::Value readCard(std::string name);
+Json::Value readCard(const std::string& name);
 
 bool writeConfig(Json::Value config);
-bool writeCard(std::string name, Json::Value card);
+bool writeCard(const std::string& name, Json::Value card);
 
 bool createDefaultConfig(std::string path);
 } // namespace Config
