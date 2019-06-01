@@ -4,19 +4,7 @@
 
 #include "backend/config.hpp"
 #include "backend/dirs.hpp"
-
-/**
- * @brief      checks if a input stream is empty
- * @retval     bool   returns if the stream is going to be empty or not
- *
- * @param      pFile  the input stream
- *
- * @return     is stream eof
- */
-bool isEmpty(std::ifstream& pFile)
-{
-    return pFile.peek() == std::ifstream::traits_type::eof() || pFile.eof();
-}
+#include "backend/files.hpp"
 
 namespace Config
 {
@@ -37,20 +25,7 @@ Json::Value readConfig()
 
     std::ifstream file((Backend::getConfigdir() + "/config.json").c_str());
 
-    if (file.good() && !isEmpty(file))
-    {
-        try
-        {
-            file >> config;
-        }
-        catch (Json::RuntimeError& param)
-        {
-            // catches invalid or malformed json
-            std::cerr << "Config seems to be malformed" << std::endl;
-        }
-    }
-
-    return config;
+    return Backend::parseFile(file);
 }
 
 /**
@@ -72,20 +47,7 @@ Json::Value readCard(const std::string& name)
 
     std::ifstream file((Backend::getCarddir() + "/" + name + ".json").c_str());
 
-    if (file.good() && !isEmpty(file))
-    {
-        try
-        {
-            file >> config;
-        }
-        catch (Json::RuntimeError& param)
-        {
-            // catches invalid or malformed json
-            std::cerr << "Config seems to be malformed" << std::endl;
-        }
-    }
-
-    return config;
+    return Backend::parseFile(file);
 }
 
 /**
