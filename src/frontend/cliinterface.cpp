@@ -102,6 +102,12 @@ int CliWindow::exec()
         nullptr,
     };
 
+    char ButtonText[3][12] = {
+        "Neu",
+        "Importieren",
+        "OK",
+    };
+
     short cursorpos = 0;
     int keych = 0;
 
@@ -125,6 +131,30 @@ int CliWindow::exec()
     {
         switch (keych)
         {
+            case 'o':
+                clear();
+                do
+                {
+                    mvprintw(0, 0, "O\nI still have to implement this.");
+                } while ((keych = getch()) != exitkey);
+                break;
+
+            case 'n':
+                clear();
+                do
+                {
+                    mvprintw(0, 0, "N\nI still have to implement this.");
+                } while ((keych = getch()) != exitkey);
+                break;
+
+            case 'i':
+                clear();
+                do
+                {
+                    mvprintw(0, 0, "I\nI still have to implement this.");
+                } while ((keych = getch()) != exitkey);
+                break;
+
             case KEY_UP:
                 if (--cursorpos < 0)
                     ++cursorpos;
@@ -179,10 +209,20 @@ int CliWindow::exec()
             mvprintw(3 + textpos, 7, "%s", p.path().stem().c_str());
         }
 
+        attron(A_UNDERLINE);
+        mvprintw(LINES - 4, 5, ButtonText[0]);                 // 0
+        mvprintw(LINES - 4, 5 + (COLS / 5), ButtonText[1]);    // 1
+        mvprintw(LINES - 4, COLS - (COLS / 5), ButtonText[2]); // 2
+        attroff(A_UNDERLINE);
+
+        mvprintw(LINES - 4, 6, &ButtonText[0][1]);                     // 0
+        mvprintw(LINES - 4, 6 + (COLS / 5), &ButtonText[1][1]);        // 1
+        mvprintw(LINES - 4, COLS - (COLS / 5) + 1, &ButtonText[2][1]); // 2
+
         // Windows are used for the Buttons because they give it a "button" feel
-        Buttons[0] = createWin(3, (COLS / 7), LINES - 5, 3);
-        Buttons[1] = createWin(3, (COLS / 7), LINES - 5, 3 + (COLS / 7));
-        Buttons[2] = createWin(3, (COLS / 7), LINES - 5, COLS - (COLS / 7) - 3);
+        Buttons[0] = createWin(3, (COLS / 5), LINES - 5, 3);
+        Buttons[1] = createWin(3, (COLS / 5), LINES - 5, 3 + (COLS / 5));
+        Buttons[2] = createWin(3, (COLS / 5), LINES - 5, COLS - (COLS / 5) - 3);
         //    Neu Importieren OK
 
         refresh();

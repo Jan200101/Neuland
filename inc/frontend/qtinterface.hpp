@@ -18,6 +18,10 @@ class MainWindow : public QMainWindow
 
    private:
     Ui::MainWindow* ui;
+
+    void addRow(const char* forename, const char* surname, const char* nickname);
+    void addRow(std::string forename, std::string surname, std::string nickname);
+    void setItem(unsigned short count, unsigned short column, const char* text);
 };
 
 #endif // INTERFACE_H
