@@ -69,7 +69,7 @@ int main(int argc, char** argv)
     // update lastrun value in config
     {
         Json::Value config = Config::readConfig();
-        config["lastrun"] = time(nullptr);
+        config["lastrun"] = (uint64_t)time(nullptr);
         Config::writeConfig(config);
     }
 
@@ -109,11 +109,7 @@ int main(int argc, char** argv)
                           << Backend::getCarddir() << std::endl;
                 Json::Value k = Config::readConfig();
 
-                k["lastrun"] = time(nullptr);
-
                 std::cout << k << std::endl;
-
-                Config::writeConfig(k);
 
                 for (auto& p : Backend::listCarddir())
                     std::cout << p.path().string() << '\n';
