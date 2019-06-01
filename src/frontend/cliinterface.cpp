@@ -1,6 +1,8 @@
 #include <ncurses/ncurses.h>
+#include <ctime>
 #include <iostream>
 
+#include "backend/config.hpp"
 #include "backend/dirs.hpp"
 #include "defines.hpp"
 #include "frontend/cliinterface.hpp"
@@ -81,6 +83,12 @@ CliWindow::CliWindow(int argc, char** argv)
     this->argv = argv;
 
     exitkey = 'q';
+
+    config = Config::readConfig();
+
+    config["lastrun"] = time(nullptr);
+
+    Config::writeConfig(config);
 
     hasColors = true;
 }

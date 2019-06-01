@@ -29,8 +29,6 @@ Json::Value readCard(const std::string& name);
 
 bool writeConfig(Json::Value config);
 bool writeCard(const std::string& name, Json::Value card);
-
-bool createDefaultConfig(std::string path);
 } // namespace Config
 
 #endif

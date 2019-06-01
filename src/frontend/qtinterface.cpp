@@ -1,13 +1,22 @@
 #ifndef NO_QT
+#include <ctime>
+
 #include "frontend/qtinterface.hpp"
 #include "ui_mainwindow.h"
 
+#include "backend/config.hpp"
 #include "backend/dirs.hpp"
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
                                           ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    config = Config::readConfig();
+
+    config["lastrun"] = time(nullptr);
+
+    Config::writeConfig(config);
 
     for (auto& p : Backend::listCarddir())
         addRow(p.path().stem().string(), "", "");

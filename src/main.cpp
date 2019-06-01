@@ -1,4 +1,5 @@
 #include <cstring>
+#include <ctime>
 #include <iostream>
 #include <string>
 
@@ -99,7 +100,11 @@ int main(int argc, char** argv)
                           << Backend::getCarddir() << std::endl;
                 Json::Value k = Config::readConfig();
 
+                k["lastrun"] = time(nullptr);
+
                 std::cout << k << std::endl;
+
+                Config::writeConfig(k);
 
                 for (auto& p : Backend::listCarddir())
                     std::cout << p.path().string() << '\n';
