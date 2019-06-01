@@ -16,8 +16,6 @@ namespace Config
  *             prints to cerr and returns an empty Json
  *
  * @return     parsed config file
- *
- * @todo       use jsoncpp reader
  */
 Json::Value readConfig()
 {
@@ -38,8 +36,6 @@ Json::Value readConfig()
  * @param[in]  name         card file name
  *
  * @return     parsed config file
- *
- * @todo       use jsoncpp reader
  */
 Json::Value readCard(const std::string& name)
 {

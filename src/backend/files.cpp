@@ -47,6 +47,16 @@ bool makeConfigfile(const std::string& filename)
     return Backend::makeFile(Backend::getConfigdir() + "/" + filename);
 }
 
+/**
+ * @brief      parses a files content to json and returns the json
+ *             if that file contains invalid json it returns an empty Json object
+ *
+ * @param      file  ifstream to the file that needs parsing
+ *
+ * @return     returns parsed json
+ * 
+ * @todo       use jsoncpp reader
+ */
 Json::Value parseFile(std::ifstream& file)
 {
     Json::Value conf;
