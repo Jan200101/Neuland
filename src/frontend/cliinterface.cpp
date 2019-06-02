@@ -85,7 +85,7 @@ CliWindow::CliWindow(int argc, char** argv)
     this->argc = argc;
     this->argv = argv;
 
-    exitkey = 'q';
+    exitkey = KEY_END;
 
     config = Config::readConfig();
 
@@ -113,7 +113,7 @@ int CliWindow::exec()
         nullptr,
     };
 
-    char ButtonText[3][12] = {
+    constexpr char ButtonText[3][12] = {
         "Neu",
         "Importieren",
         "OK",
@@ -142,6 +142,9 @@ int CliWindow::exec()
     {
         switch (keych)
         {
+            case 10: // Enter is 10 on my machine so ???
+            case KEY_ENTER:
+            case 'O':
             case 'o':
                 clear();
                 do
@@ -150,14 +153,21 @@ int CliWindow::exec()
                 } while ((keych = getch()) != exitkey);
                 break;
 
+            case 'N':
             case 'n':
                 clear();
                 do
                 {
+                    destroyWin(win);
+                    refresh();
+
+                    win = createWin(LINES - 3, COLS - 4, 2, 2);
+
                     mvprintw(0, 0, "N\nI still have to implement this.");
                 } while ((keych = getch()) != exitkey);
                 break;
 
+            case 'I':
             case 'i':
                 clear();
                 do
@@ -256,6 +266,8 @@ int CliWindow::exec()
         Buttons[1] = createWin(3, (COLS / 5), LINES - 5, 3 + (COLS / 5));
         Buttons[2] = createWin(3, (COLS / 5), LINES - 5, COLS - (COLS / 5) - 3);
         //    Neu Importieren OK
+
+        mvprintw(0, 0, "%i %i", KEY_ENTER, keych);
 
         refresh();
     } while ((keych = getch()) != exitkey);
