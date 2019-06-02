@@ -244,7 +244,7 @@ int CliWindow::exec()
                 categories += card.get("categories", Json::Value())[i].asString();
             }
 
-            mvprintw(4 + textpos, 7, "%s", p.path().stem().c_str());
+            mvprintw(4 + textpos, 7, "%s", p.path().stem().string().c_str());
             mvprintw(4 + textpos, 20, "%u", card.get("cards", Json::Value()).size());
             mvprintw(4 + textpos, 30, "%s", categories.c_str());
 
