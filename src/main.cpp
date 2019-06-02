@@ -62,9 +62,9 @@ int main(int argc, char** argv)
     int (*app)(int&, char**) = DEFAULTINTERFACE;
 
     // create environment needed
-    Backend::makeConfigdir();
-    Backend::makeCarddir();
-    Backend::makeConfigfile();
+    Backend::makeConfigdir();  // create main config directory
+    Backend::makeCarddir();    // create card dir in the config directory
+    Backend::makeConfigfile(); // create config file
 
     // update lastrun value in config
     {

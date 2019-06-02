@@ -1,5 +1,5 @@
 #include <ncurses/ncurses.h>
-#include <iostream>
+#include <fstream>
 
 #include "defines.hpp"
 
@@ -7,6 +7,7 @@
 
 #include "backend/config.hpp"
 #include "backend/dirs.hpp"
+#include "backend/files.hpp"
 
 #define TEXTCOLOR 1
 #define TITLECOLOR 2
@@ -21,7 +22,8 @@
  *
  * @return     WINDOW*
  */
-WINDOW* createWin(int height, int width, int starty, int startx)
+WINDOW*
+createWin(int height, int width, int starty, int startx)
 {
     WINDOW* win;
 
@@ -98,6 +100,10 @@ CliWindow::CliWindow(int argc, char** argv)
  */
 int CliWindow::exec()
 {
+    std::ifstream file;
+    Json::Value card;
+    std::string categories;
+
     WINDOW* win = nullptr;
     WINDOW* list = nullptr;
 
@@ -201,17 +207,38 @@ int CliWindow::exec()
 
         short textpos = 0;
 
+        mvprintw(4 + textpos, 7, "Title");
+        mvprintw(4 + textpos, 20, "Anzahl");
+        mvprintw(4 + textpos, 30, "Kategorien");
+
         for (auto& p : Backend::listCarddir())
         {
+            categories.clear();
+            file.open(p.path().c_str());
+            card = Backend::parseFile(file);
+
             if ((3 + textpos++) > LINES - 8)
                 break;
             if (cursorpos + 1 == textpos)
             {
                 attron(A_BOLD);
-                mvprintw(3 + textpos, 5, "*");
+                mvprintw(4 + textpos, 5, "*");
                 attroff(A_BOLD);
             }
-            mvprintw(3 + textpos, 7, "%s", p.path().stem().c_str());
+
+            int size = card.get("categories", Json::Value()).size();
+            for (int i = 0; i < size; ++i)
+            {
+                if (!categories.empty())
+                    categories += " ,";
+                categories += card.get("categories", Json::Value())[i].asString();
+            }
+
+            mvprintw(4 + textpos, 7, "%s", p.path().stem().c_str());
+            mvprintw(4 + textpos, 20, "%u", card.get("cards", Json::Value()).size());
+            mvprintw(4 + textpos, 30, "%s", categories.c_str());
+
+            file.close();
         }
 
         attron(A_UNDERLINE);
