@@ -52,7 +52,7 @@ HEADERS        += \
 LIBS           += \
                -ljsoncpp \
                -lncurses \
-
+               $${OBJECTS_DIR}/info.o \
 
 # gcc 9 doesn't need you to and can't link the filesystem library
 !g++9: LIBS   +=
@@ -67,6 +67,14 @@ RESOURCES      += \
 INCLUDEPATH    += \
                src \
                inc \
+
+RC_ICON         =
+               ui/icons/icon.ico
+
+RC_FILE         =
+               res/info.rc
+
+
 
 # Deployment
 qnx: target.path = /tmp/$${TARGET}/bin

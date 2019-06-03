@@ -10,6 +10,7 @@ MKDIR           := mkdir -p
 DOXYGEN         := doxygen
 QMAKE           := qmake-qt5
 PKG-CONFIG      := pkg-config
+WINDRES         := windres
 
 # CROSS COMPILATION SETUP
 CROSS           :=
@@ -64,6 +65,7 @@ OBJ_DIRS        := $(OBJ_DIR) \
 
 SRC_DIR         := src
 INC_DIR         := inc
+RES_DIR         := res
 
 FILES           := $(filter-out $(BUILD_DIR), $(wildcard *))
 
@@ -101,6 +103,10 @@ CC_SRC_FILES    := $(filter-out $(SRC_DIR)/$(UNIT_TEST_SRC), $(CC_SRC_FILES))
 OBJ_FILES       := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o, $(CXX_SRC_FILES)) \
 				   $(patsubst $(SRC_DIR)/%.c,  $(OBJ_DIR)/%.o, $(CC_SRC_FILES))
 
+ifeq ($(PLATFORM),WINDOWS)
+	RC_FILES     := $(patsubst $(RES_DIR)/%.rc,  $(OBJ_DIR)/%.o, $(wildcard $(RES_DIR)/*.rc))
+	OBJ_FILES    += $(RC_FILES)
+endif
 
 # TARGETS
 
@@ -119,7 +125,7 @@ $(OBJ_DIR):
 	${MKDIR} ${OBJ_DIRS}
 
 .ONESHELL:
-$(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR)
+$(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR) $(RC_FILES)
 	cd ${BUILD_DIR}
 	${CROSS}${QMAKE} ..
 
@@ -147,6 +153,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	${CROSS}${CC} -c -o$@ $< -std=${STD} ${CFLAGS} ${WARNFLAGS} ${INCLUDEFLAGS} ${DEFINES}
 
+$(OBJ_DIR)/%.o: $(RES_DIR)/%.rc | $(OBJ_DIR)
+	${CROSS}${WINDRES} -i $< -o $@
 
 loc:
 	-find ${SRC_DIR} ${INC_DIR} -name '*.cpp' -o -name '*.c' -o -name '*.h' -o -name '*.hpp' -type f | xargs wc -l
