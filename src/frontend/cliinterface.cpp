@@ -22,8 +22,7 @@
  *
  * @return     WINDOW*
  */
-WINDOW*
-createWin(int height, int width, int starty, int startx)
+WINDOW* createWin(int height, int width, int starty, int startx)
 {
     WINDOW* win;
 
