@@ -52,7 +52,6 @@ HEADERS        += \
 LIBS           += \
                -ljsoncpp \
                -lncurses \
-               $${OBJECTS_DIR}/info.o \
 
 # gcc 9 doesn't need you to and can't link the filesystem library
 !g++9: LIBS   +=
@@ -68,11 +67,19 @@ INCLUDEPATH    += \
                src \
                inc \
 
+
+# RC stuff
+win32:
+{
+LIBS    +=
+               $${OBJECTS_DIR}/info.o
+
 RC_ICON         =
                ui/icons/icon.ico
 
 RC_FILE         =
                res/info.rc
+}
 
 
 
