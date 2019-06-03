@@ -107,7 +107,7 @@ OBJ_FILES       := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o, $(CXX_SRC_FILES))
 default: cli
 
 # graphical and cli targets clash
-all: graphical docs
+all: default docs
 
 $(BIN_DIR):
 	${MKDIR} $@
