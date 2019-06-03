@@ -3,6 +3,7 @@ NAME            := $(shell pwd | sed -E "s/.*\/([a-zA-Z0-9_-]*)/\1/")
 STD             := c++17
 
 # COMMAND VARIABLES
+LS              := ls -l
 RM              := rm -r
 RMDIR           := rmdir
 MKDIR           := mkdir -p
@@ -124,14 +125,17 @@ $(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR)
 
 graphical: $(BUILD_DIR)/Makefile
 	${MAKE} -C $(BUILD_DIR)
+	-@${LS} $(BIN_DIR)/${NAME}$(OUT_EXT)
 
 cli: $(BIN_DIR)/$(NAME)$(OUT_EXT)
+	-@${LS} $(BIN_DIR)/${NAME}$(OUT_EXT)
+
 
 clean:
 	-${RM} ${NAME}.tar ${BUILD_DIR} ${BIN_DIR}
 
 docs: Doxyfile
-	-$(DOXYGEN)
+	-${DOXYGEN}
 
 
 $(BIN_DIR)/$(NAME)$(OUT_EXT): $(OBJ_FILES) | $(BIN_DIR) $(OBJ_DIR)

@@ -5,6 +5,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET          = Neuland
 TEMPLATE        = app
 
+# directories relative to the build direcotry
+# the main makefile handles the build directory for you
 DESTDIR         = ../bin  # bin
 OBJECTS_DIR     = obj     # build/obj
 MOC_DIR         = moc     # build/moc
@@ -52,7 +54,7 @@ LIBS           += \
                -lncurses \
 
 
-# gcc 9 doesn't need you and can't link the fs standard
+# gcc 9 doesn't need you to and can't link the filesystem library
 !g++9: LIBS   +=
                -lstdc++fs \
 
