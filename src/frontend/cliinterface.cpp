@@ -116,9 +116,6 @@ int CliWindow::exec()
     {
         fs::directory_iterator carddir = Backend::listCarddir();
 
-        //for (std::filesystem::directory_entry p : carddir)
-        //    paths.push_back(p);
-
         std::copy(fs::begin(carddir), fs::end(carddir),
                   std::back_inserter(paths));
     }
@@ -163,6 +160,17 @@ int CliWindow::exec()
             case 'O':
             case 'o':
                 clear();
+                file.open(paths[cursorpos].path().c_str());
+                card = Backend::parseFile(file);
+                file.close();
+
+                if (!card.get("cards", Json::Value()).size())
+                {
+                    mvprintw(0, 0, "Diese Karte enthält keine Fragen");
+                    getch();
+                    break;
+                }
+
                 do
                 {
                     mvprintw(0, 0, "O\n%s", paths[cursorpos].path().stem().c_str());
