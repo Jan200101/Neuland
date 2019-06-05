@@ -1,5 +1,8 @@
 #include <ncurses/ncurses.h>
+#include <algorithm>
+#include <filesystem>
 #include <fstream>
+#include <vector>
 
 #include "defines.hpp"
 
@@ -11,6 +14,8 @@
 
 #define TEXTCOLOR 1
 #define TITLECOLOR 2
+
+namespace fs = std::filesystem;
 
 /**
  * @brief      creates ncurses window with given value and returns it
@@ -105,6 +110,18 @@ int CliWindow::exec()
 
     WINDOW* win = nullptr;
     WINDOW* list = nullptr;
+
+    std::vector<fs::directory_entry> paths;
+
+    {
+        fs::directory_iterator carddir = Backend::listCarddir();
+
+        //for (std::filesystem::directory_entry p : carddir)
+        //    paths.push_back(p);
+
+        std::copy(fs::begin(carddir), fs::end(carddir),
+                  std::back_inserter(paths));
+    }
 
     WINDOW* Buttons[3] = {
         nullptr,
@@ -220,7 +237,7 @@ int CliWindow::exec()
         mvprintw(4 + textpos, 20, "Anzahl");
         mvprintw(4 + textpos, 30, "Kategorien");
 
-        for (auto& p : Backend::listCarddir())
+        for (std::filesystem::directory_entry& p : paths)
         {
             categories.clear();
             file.open(p.path().c_str());
