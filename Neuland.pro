@@ -69,16 +69,11 @@ INCLUDEPATH    += \
 
 
 # RC stuff
-win32:
-{
-LIBS    +=
+win32: {
+# the RC is compiled before the qmake project is ever called
+# the object build is freely used by any target
+LIBS           += \
                $${OBJECTS_DIR}/info.o
-
-RC_ICON         =
-               ui/icons/icon.ico
-
-RC_FILE         =
-               res/info.rc
 }
 
 
