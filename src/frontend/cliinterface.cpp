@@ -135,7 +135,7 @@ int CliWindow::exec()
         "OK",
     };
 
-    short cursorpos = 0;
+    unsigned short cursorpos = 0;
     int keych = 0;
 
     initscr();
@@ -165,7 +165,7 @@ int CliWindow::exec()
                 clear();
                 do
                 {
-                    mvprintw(0, 0, "O\nI still have to implement this.");
+                    mvprintw(0, 0, "O\n%s", paths[cursorpos].path().stem().c_str());
                 } while ((keych = getch()) != exitkey);
                 break;
 
@@ -193,12 +193,12 @@ int CliWindow::exec()
                 break;
 
             case KEY_UP:
-                if (--cursorpos < 0)
+                if (--cursorpos == (unsigned short)-1)
                     ++cursorpos;
                 break;
 
             case KEY_DOWN:
-                if (++cursorpos < 0)
+                if (++cursorpos >= paths.size())
                     --cursorpos;
                 break;
         }
