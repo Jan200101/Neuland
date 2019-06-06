@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
 {
     ui->setupUi(this);
 
-    config = Config::readConfig();
+    config = new Json::Value;
+    *config = Config::readConfig();
 
     std::ifstream file;
     Json::Value card;
@@ -47,6 +48,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete config;
 }
 
 /**

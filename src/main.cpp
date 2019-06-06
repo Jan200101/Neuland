@@ -68,9 +68,11 @@ int main(int argc, char** argv)
 
     // update lastrun value in config
     {
-        Json::Value config = Config::readConfig();
-        config["lastrun"] = (uint64_t)time(nullptr);
-        Config::writeConfig(config);
+        Json::Value* config = new Json::Value;
+        *config = Config::readConfig();
+        (*config)["lastrun"] = (uint64_t)time(nullptr);
+        Config::writeConfig(*config);
+        delete config;
     }
 
     if (argc > 1)

@@ -63,9 +63,15 @@ CliWindow::CliWindow(int argc, char** argv)
 
     exitkey = KEY_END;
 
-    config = Config::readConfig();
+    config = new Json::Value;
+    *config = Config::readConfig();
 
     hasColors = true;
+}
+
+CliWindow::~CliWindow()
+{
+    delete config;
 }
 
 /**
