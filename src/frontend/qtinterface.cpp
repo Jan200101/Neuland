@@ -49,6 +49,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/**
+ * @brief      adds a row to the tableWidget
+ *
+ * @param      title        the packs name
+ * @param      amount       the amount of cards in the pack
+ * @param      categories   all the categories
+ */
 void MainWindow::addRow(const char* title, const char* amount, const char* categories)
 {
     unsigned short count = ui->tableWidget->rowCount();
@@ -60,16 +67,31 @@ void MainWindow::addRow(const char* title, const char* amount, const char* categ
     this->setItem(count, 2, categories);
 }
 
+/**
+ * @brief      adds a row to the tableWidget
+ *             string wrapper around MainWindow::addRow(const char* title, const char* amount, const char* categories)
+ *
+ * @param      title        the packs name
+ * @param      amount       the amount of cards in the pack
+ * @param      categories   all the categories
+ */
 void MainWindow::addRow(std::string title, std::string amount, std::string categories)
 {
     this->addRow(title.c_str(), amount.c_str(), categories.c_str());
 }
 
-void MainWindow::setItem(unsigned short count, unsigned short column, const char* text)
+/**
+ * @brief      sets item text
+ *
+ * @param      column       the column number
+ * @param      row          the row number
+ * @param      text         text to use for the item
+ */
+void MainWindow::setItem(unsigned short column, unsigned short row, const char* text)
 {
     QTableWidgetItem* __qtablewidgetitem = new QTableWidgetItem();
 
-    ui->tableWidget->setItem(count, column, __qtablewidgetitem);
+    ui->tableWidget->setItem(column, row, __qtablewidgetitem);
     __qtablewidgetitem->setText(text);
 }
 #endif

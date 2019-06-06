@@ -56,34 +56,6 @@ void destroyWin(WINDOW* win)
     delwin(win);
 }
 
-/**
- * @brief      creates a text box esk object on the screen
- *
- * @param      win     The window
- * @param      starty  The starty
- * @param      startx  The startx
- * @param      width   The width
- * @param      color   The color
- */
-void createTextbox(WINDOW* win, int starty, int startx, int width, bool color)
-{
-    char* temp = new char[width + 1];
-
-    for (int i = 0; i < width; ++i)
-        temp[i] = ' ';
-
-    if (win == nullptr)
-        win = stdscr;
-
-    if (color)
-        attron(COLOR_PAIR(TEXTCOLOR));
-    mvwprintw(win, starty, startx, "%s", temp);
-    if (color)
-        attroff(COLOR_PAIR(TEXTCOLOR));
-
-    refresh();
-}
-
 CliWindow::CliWindow(int argc, char** argv)
 {
     this->argc = argc;
