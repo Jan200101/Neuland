@@ -112,7 +112,7 @@ endif
 
 default: cli
 
-# graphical and cli targets clash
+# qt and cli targets clash
 all: default docs
 
 $(BIN_DIR):
@@ -129,7 +129,8 @@ $(BUILD_DIR)/Makefile: $(BUILD_DIR) $(BIN_DIR) $(RC_FILES)
 	cd ${BUILD_DIR}
 	${CROSS}${QMAKE} ..
 
-graphical: $(BUILD_DIR)/Makefile
+graphical: qt
+qt: $(BUILD_DIR)/Makefile
 	${MAKE} -C $(BUILD_DIR)
 	-@${LS} $(BIN_DIR)/${NAME}$(OUT_EXT)
 
@@ -177,4 +178,4 @@ $(NAME).tar:
 	tar -cf $@ ${FILES};
 
 
-.PHONY: default graphical cli clean docs loc install uninstall tar
+.PHONY: default graphical qt cli clean docs loc install uninstall tar
