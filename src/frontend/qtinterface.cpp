@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
         for (int i = 0; i < size; ++i)
         {
             if (!categories.empty())
-                categories += " ,";
+                categories += ", ";
             categories += card.get("categories", Json::Value())[i].asString();
         }
 
