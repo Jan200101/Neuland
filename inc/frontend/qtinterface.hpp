@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow
 
     void addRow(const char* forename, const char* surname, const char* nickname);
     void addRow(std::string forename, std::string surname, std::string nickname);
-    void setItem(unsigned short column, unsigned short row, const char* text)
+    void setItem(unsigned short column, unsigned short row, const char* text);
 };
 
 #endif // INTERFACE_H
