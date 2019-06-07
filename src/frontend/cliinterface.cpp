@@ -110,7 +110,8 @@ int CliWindow::exec()
         "OK",
     };
 
-    unsigned short cursorpos = 0;
+    unsigned short scrollpos = 0,
+                   cursorpos = scrollpos;
     int keych = 0;
 
     initscr();
@@ -131,13 +132,13 @@ int CliWindow::exec()
 
     do
     {
+        clear();
         switch (keych)
         {
             case 10: // Enter is 10 on my machine so ???
             case KEY_ENTER:
             case 'O':
             case 'o':
-                clear();
                 file.open(paths[cursorpos].path().c_str());
                 card = Backend::parseFile(file);
                 file.close();
@@ -157,7 +158,6 @@ int CliWindow::exec()
 
             case 'N':
             case 'n':
-                clear();
                 do
                 {
                     destroyWin(win);
@@ -171,11 +171,22 @@ int CliWindow::exec()
 
             case 'I':
             case 'i':
-                clear();
                 do
                 {
                     mvprintw(0, 0, "I\nI still have to implement this.");
                 } while ((keych = getch()) != exitkey);
+                break;
+
+            case 'U':
+            case 'u':
+                if (--scrollpos == (unsigned short)-1)
+                    ++scrollpos;
+                break;
+
+            case 'J':
+            case 'j':
+                if (++scrollpos == paths.size())
+                    --scrollpos;
                 break;
 
             case KEY_UP:
@@ -225,30 +236,38 @@ int CliWindow::exec()
 
         for (std::filesystem::directory_entry& p : paths)
         {
-            categories.clear();
+            if (!categories.empty()) // only clear categories if they are not empty to not waste resources
+                categories.clear();
+
+            if (file.good()) // incase something is still in file we close it
+                file.close();
+
             file.open(p.path().c_str());
             card = Backend::parseFile(file);
 
-            if ((3 + textpos++) > LINES - 8)
+            if ((4 - scrollpos + textpos++) > LINES - 8)
                 break;
+            else if (textpos <= scrollpos)
+                continue;
+
             if (cursorpos + 1 == textpos)
             {
                 attron(A_BOLD);
-                mvprintw(4 + textpos, 5, "*");
+                mvprintw(4 + textpos - scrollpos, 5, "*");
                 attroff(A_BOLD);
             }
 
-            int size = card.get("categories", Json::Value()).size();
-            for (int i = 0; i < size; ++i)
+            unsigned short size = card.get("categories", Json::Value()).size();
+            for (unsigned short i = 0; i < size; ++i)
             {
                 if (!categories.empty())
                     categories += ", ";
                 categories += card.get("categories", Json::Value())[i].asString();
             }
 
-            mvprintw(4 + textpos, 7, "%s", p.path().stem().string().c_str());
-            mvprintw(4 + textpos, 20, "%u", card.get("cards", Json::Value()).size());
-            mvprintw(4 + textpos, 30, "%s", categories.c_str());
+            mvprintw(4 + textpos - scrollpos, 7, "%s", p.path().stem().string().c_str());
+            mvprintw(4 + textpos - scrollpos, 20, "%u", card.get("cards", Json::Value()).size());
+            mvprintw(4 + textpos - scrollpos, 30, "%s", categories.c_str());
 
             file.close();
         }
