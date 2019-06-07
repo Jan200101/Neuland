@@ -152,7 +152,7 @@ int CliWindow::exec()
 
                 do
                 {
-                    mvprintw(0, 0, "O\n%s", paths[cursorpos].path().stem().c_str());
+                    mvprintw(0, 0, "O\n%s", paths[cursorpos].path().stem().string().c_str());
                 } while ((keych = getch()) != exitkey);
                 break;
 
