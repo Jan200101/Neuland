@@ -110,8 +110,9 @@ int CliWindow::exec()
         "OK",
     };
 
-    unsigned short scrollpos = 0,
-                   cursorpos = scrollpos;
+    unsigned short textpos,
+        scrollpos = 0,
+        cursorpos = scrollpos;
     int keych = 0;
 
     initscr();
@@ -177,26 +178,23 @@ int CliWindow::exec()
                 } while ((keych = getch()) != exitkey);
                 break;
 
-            case 'U':
-            case 'u':
-                if (--scrollpos == (unsigned short)-1)
-                    ++scrollpos;
-                break;
-
-            case 'J':
-            case 'j':
-                if (++scrollpos == paths.size())
-                    --scrollpos;
-                break;
-
             case KEY_UP:
                 if (--cursorpos == (unsigned short)-1)
                     ++cursorpos;
+
+                if (cursorpos - scrollpos < 2)
+                    if (--scrollpos == (unsigned short)-1)
+                        ++scrollpos;
                 break;
 
             case KEY_DOWN:
                 if (++cursorpos >= paths.size())
                     --cursorpos;
+
+                if (textpos - scrollpos - 2 <= cursorpos)
+                    if (++scrollpos == paths.size())
+                        --scrollpos;
+
                 break;
         }
 
@@ -207,11 +205,6 @@ int CliWindow::exec()
         destroyWin(Buttons[0]);
         destroyWin(Buttons[1]);
         destroyWin(Buttons[2]);
-
-        /* Clears title bar */
-        for (int x = 0; x <= 1; ++x)
-            for (int y = 0; y <= COLS; ++y)
-                mvprintw(x, y, " ");
 
         // print text in the middle of the head
         if (hasColors)
@@ -226,10 +219,9 @@ int CliWindow::exec()
         win = createWin(LINES - 3, COLS - 4, 2, 2);
         list = createWin(LINES - 8, COLS - 6, 3, 3);
 
+        textpos = 0;
+
         // print file names
-
-        short textpos = 0;
-
         mvprintw(4 + textpos, 7, "Title");
         mvprintw(4 + textpos, 20, "Anzahl");
         mvprintw(4 + textpos, 30, "Kategorien");
@@ -245,7 +237,7 @@ int CliWindow::exec()
             file.open(p.path().c_str());
             card = Backend::parseFile(file);
 
-            if ((4 - scrollpos + textpos++) > LINES - 8)
+            if (12 - scrollpos + textpos++ > LINES)
                 break;
             else if (textpos <= scrollpos)
                 continue;
