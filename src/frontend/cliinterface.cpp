@@ -1,5 +1,7 @@
 #include <ncurses/ncurses.h>
 #include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <vector>
@@ -67,6 +69,8 @@ CliWindow::CliWindow(int argc, char** argv)
     *config = Config::readConfig();
 
     hasColors = true;
+
+    std::srand((*config)["lastrun"].asInt());
 }
 
 CliWindow::~CliWindow()
@@ -90,6 +94,7 @@ int CliWindow::exec()
     WINDOW* list = nullptr;
 
     std::vector<fs::directory_entry> paths;
+    std::vector<Json::Value> cards;
 
     {
         fs::directory_iterator carddir = Backend::listCarddir();
@@ -111,6 +116,8 @@ int CliWindow::exec()
     };
 
     unsigned short textpos,
+        answered,
+        curcard,
         scrollpos = 0,
         cursorpos = scrollpos;
     int keych = 0;
@@ -140,21 +147,48 @@ int CliWindow::exec()
             case KEY_ENTER:
             case 'O':
             case 'o':
+
+                keych = 0;
+                answered = 0;
+
+                if (file.is_open())
+                    file.close();
                 file.open(paths[cursorpos].path().c_str());
                 card = Backend::parseFile(file);
                 file.close();
 
-                if (!card.get("cards", Json::Value()).size())
+                if (!card.get("cards", false))
                 {
                     mvprintw(0, 0, "Diese Karte enthält keine Fragen");
                     getch();
                     break;
                 }
 
+                cards.clear();
+                std::copy(card["cards"].begin(), card["cards"].end(),
+                          std::back_inserter(cards));
+
                 do
                 {
-                    mvprintw(0, 0, "O\n%s", paths[cursorpos].path().stem().string().c_str());
-                } while ((keych = getch()) != exitkey);
+                    clear();
+
+                    if (cards.empty())
+                        continue;
+
+                    curcard = std::rand() % cards.size();
+
+                    destroyWin(win);
+                    refresh();
+
+                    win = createWin(LINES - 2, COLS - 4, 1, 2);
+
+                    mvprintw(2, COLS - 24 - (int)(answered >= 10 ? 1 : 0), "%u richtig beantwortet", answered);
+
+                    mvprintw(3, (COLS - std::strlen(cards[curcard].get("question", "").asCString())) / 2, "%s", cards[curcard].get("question", "").asCString());
+
+                    ++answered;
+
+                } while (!cards.empty() && (keych = getch()) != exitkey);
                 break;
 
             case 'N':
@@ -182,7 +216,7 @@ int CliWindow::exec()
                 if (--cursorpos == (unsigned short)-1)
                     ++cursorpos;
 
-                if (cursorpos - scrollpos < 2)
+                if (cursorpos - scrollpos < 1)
                     if (--scrollpos == (unsigned short)-1)
                         ++scrollpos;
                 break;
@@ -191,10 +225,9 @@ int CliWindow::exec()
                 if (++cursorpos >= paths.size())
                     --cursorpos;
 
-                if (textpos - scrollpos - 2 <= cursorpos)
+                if (textpos - scrollpos - 3 < cursorpos) // ¯\_(ツ)_/¯
                     if (++scrollpos == paths.size())
                         --scrollpos;
-
                 break;
         }
 
@@ -231,11 +264,12 @@ int CliWindow::exec()
             if (!categories.empty()) // only clear categories if they are not empty to not waste resources
                 categories.clear();
 
-            if (file.good()) // incase something is still in file we close it
+            if (file.is_open()) // incase something is still in file we close it
                 file.close();
 
             file.open(p.path().c_str());
             card = Backend::parseFile(file);
+            file.close();
 
             if (12 - scrollpos + textpos++ > LINES)
                 break;
@@ -249,19 +283,24 @@ int CliWindow::exec()
                 attroff(A_BOLD);
             }
 
-            unsigned short size = card.get("categories", Json::Value()).size();
-            for (unsigned short i = 0; i < size; ++i)
-            {
-                if (!categories.empty())
-                    categories += ", ";
-                categories += card.get("categories", Json::Value())[i].asString();
-            }
-
             mvprintw(4 + textpos - scrollpos, 7, "%s", p.path().stem().string().c_str());
-            mvprintw(4 + textpos - scrollpos, 20, "%u", card.get("cards", Json::Value()).size());
-            mvprintw(4 + textpos - scrollpos, 30, "%s", categories.c_str());
 
-            file.close();
+            try
+            {
+                unsigned short size = card.get("categories", Json::Value()).size();
+                for (unsigned short i = 0; i < size; ++i)
+                {
+                    if (!categories.empty())
+                        categories += ", ";
+                    categories += card.get("categories", Json::Value())[i].asString();
+                }
+
+                mvprintw(4 + textpos - scrollpos, 20, "%u", card.get("cards", Json::Value()).size());
+                mvprintw(4 + textpos - scrollpos, 30, "%s", categories.c_str());
+            }
+            catch (Json::LogicError& err)
+            {
+            }
         }
 
         attron(A_UNDERLINE);
