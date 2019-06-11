@@ -186,9 +186,13 @@ int CliWindow::exec()
 
                     mvprintw(3, (COLS - std::strlen(cards[curcard].get("question", "").asCString())) / 2, "%s", cards[curcard].get("question", "").asCString());
 
-                    ++answered;
+                    for (unsigned int i = 0; i < cards[curcard]["answers"].size(); ++i)
+                    {
+                        mvprintw(5 + i, 4, "%i. %s", i + 1, cards[curcard]["answers"][i][0].asCString());
+                    }
 
                 } while (!cards.empty() && (keych = getch()) != exitkey);
+                clear();
                 break;
 
             case 'N':

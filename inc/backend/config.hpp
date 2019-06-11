@@ -13,10 +13,10 @@
 	"cards": [
 		{
 			"question": "<question>",
-			"answers": {
-				"right": ["right answer"],
-				"false": ["false answer"]
-			}
+			"answers": [
+				["false answer", false],
+				["right answer", true]
+			]
 		}
 	]
 }
