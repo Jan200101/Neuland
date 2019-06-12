@@ -96,7 +96,7 @@ int main(int argc, char** argv)
                 terminate = true;
             }
 #ifndef NO_QT
-            else if (!std::strcmp(argv[i], "--grapical"))
+            else if (!std::strcmp(argv[i], "--graphical"))
             {
                 app = rungraphical;
             }
