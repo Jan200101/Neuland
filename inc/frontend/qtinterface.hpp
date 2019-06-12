@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow
 
    private:
     Ui::MainWindow* ui;
-    Json::Value* config;
+    Json::Value config;
 
     void addRow(const char* forename, const char* surname, const char* nickname);
     void addRow(std::string forename, std::string surname, std::string nickname);

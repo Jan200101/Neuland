@@ -65,17 +65,11 @@ CliWindow::CliWindow(int argc, char** argv)
 
     exitkey = KEY_END;
 
-    config = new Json::Value;
-    *config = Config::readConfig();
+    config = Config::readConfig();
 
     hasColors = true;
 
-    std::srand((*config)["lastrun"].asInt());
-}
-
-CliWindow::~CliWindow()
-{
-    delete config;
+    std::srand(config["lastrun"].asInt());
 }
 
 /**
