@@ -9,13 +9,13 @@ namespace Ui
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class QtInterface : public QMainWindow
 {
     Q_OBJECT
 
    public:
-    explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    explicit QtInterface(QWidget* parent = nullptr);
+    ~QtInterface();
 
    private:
     Ui::MainWindow* ui;

@@ -33,7 +33,7 @@
 int rungraphical(int& argc, char** argv)
 {
     QApplication App(argc, argv);
-    MainWindow window;
+    QtInterface window;
     window.show();
 
     return App.exec();

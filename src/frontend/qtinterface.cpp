@@ -10,8 +10,8 @@
 #include "backend/dirs.hpp"
 #include "backend/files.hpp"
 
-MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
-                                          ui(new Ui::MainWindow)
+QtInterface::QtInterface(QWidget* parent) : QMainWindow(parent),
+                                            ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent),
     }
 }
 
-MainWindow::~MainWindow()
+QtInterface::~QtInterface()
 {
     delete ui;
 }
@@ -56,7 +56,7 @@ MainWindow::~MainWindow()
  * @param      amount       the amount of cards in the pack
  * @param      categories   all the categories
  */
-void MainWindow::addRow(const char* title, const char* amount, const char* categories)
+void QtInterface::addRow(const char* title, const char* amount, const char* categories)
 {
     unsigned short count = ui->tableWidget->rowCount();
 
@@ -75,7 +75,7 @@ void MainWindow::addRow(const char* title, const char* amount, const char* categ
  * @param      amount       the amount of cards in the pack
  * @param      categories   all the categories
  */
-void MainWindow::addRow(std::string title, std::string amount, std::string categories)
+void QtInterface::addRow(std::string title, std::string amount, std::string categories)
 {
     this->addRow(title.c_str(), amount.c_str(), categories.c_str());
 }
@@ -87,7 +87,7 @@ void MainWindow::addRow(std::string title, std::string amount, std::string categ
  * @param      row          the row number
  * @param      text         text to use for the item
  */
-void MainWindow::setItem(unsigned short column, unsigned short row, const char* text)
+void QtInterface::setItem(unsigned short column, unsigned short row, const char* text)
 {
     QTableWidgetItem* __qtablewidgetitem = new QTableWidgetItem();
 
