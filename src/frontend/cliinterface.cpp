@@ -120,7 +120,7 @@ int CliWindow::exec()
         curcard,
         scrollpos = 0,
         cursorpos = scrollpos;
-    int keych = 0;
+    unsigned int keych = -1;
 
     initscr();
 
@@ -140,7 +140,6 @@ int CliWindow::exec()
 
     do
     {
-        clear();
         switch (keych)
         {
             case 10: // Enter is 10 on my machine so ???
@@ -148,7 +147,8 @@ int CliWindow::exec()
             case 'O':
             case 'o':
 
-                keych = 0;
+                keych = -1;
+                curcard = -1;
                 answered = 0;
 
                 if (file.is_open())
@@ -157,7 +157,7 @@ int CliWindow::exec()
                 card = Backend::parseFile(file);
                 file.close();
 
-                if (!card.get("cards", false))
+                if (card.get("cards", Json::Value()).empty())
                 {
                     mvprintw(0, 0, "Diese Karte enthält keine Fragen");
                     getch();
@@ -170,6 +170,14 @@ int CliWindow::exec()
 
                 do
                 {
+                    if (curcard != (unsigned short)-1)
+                    {
+                        if (cards[curcard]["answers"].size() > keych - 49 && cards[curcard]["answers"][keych - 49][1].asBool())
+                        {
+                            cards.erase(cards.begin() + curcard);
+                            ++answered;
+                        }
+                    }
                     clear();
 
                     if (cards.empty())
@@ -192,7 +200,6 @@ int CliWindow::exec()
                     }
 
                 } while (!cards.empty() && (keych = getch()) != exitkey);
-                clear();
                 break;
 
             case 'N':
@@ -234,6 +241,7 @@ int CliWindow::exec()
                         --scrollpos;
                 break;
         }
+        clear();
 
         // cleanup all Windows
         destroyWin(win);

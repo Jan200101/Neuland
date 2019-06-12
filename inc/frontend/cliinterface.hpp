@@ -16,7 +16,7 @@ class CliWindow
     int argc;
     char** argv;
     bool hasColors;
-    int exitkey;
+    unsigned int exitkey;
     Json::Value* config;
 
    public:
