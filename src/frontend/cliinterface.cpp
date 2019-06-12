@@ -103,15 +103,13 @@ int CliWindow::exec()
                   std::back_inserter(paths));
     }
 
-    WINDOW* Buttons[3] = {
-        nullptr,
+    WINDOW* Buttons[2] = {
         nullptr,
         nullptr,
     };
 
-    constexpr char ButtonText[3][12] = {
+    constexpr char ButtonText[2][12] = {
         "Neu",
-        "Importieren",
         "OK",
     };
 
@@ -249,7 +247,6 @@ int CliWindow::exec()
 
         destroyWin(Buttons[0]);
         destroyWin(Buttons[1]);
-        destroyWin(Buttons[2]);
 
         // print text in the middle of the head
         if (hasColors)
@@ -317,18 +314,15 @@ int CliWindow::exec()
 
         attron(A_UNDERLINE);
         mvprintw(LINES - 4, 5, ButtonText[0]);                 // 0
-        mvprintw(LINES - 4, 5 + (COLS / 5), ButtonText[1]);    // 1
-        mvprintw(LINES - 4, COLS - (COLS / 5), ButtonText[2]); // 2
+        mvprintw(LINES - 4, COLS - (COLS / 5), ButtonText[1]); // 1
         attroff(A_UNDERLINE);
 
         mvprintw(LINES - 4, 6, &ButtonText[0][1]);                     // 0
-        mvprintw(LINES - 4, 6 + (COLS / 5), &ButtonText[1][1]);        // 1
-        mvprintw(LINES - 4, COLS - (COLS / 5) + 1, &ButtonText[2][1]); // 2
+        mvprintw(LINES - 4, COLS - (COLS / 5) + 1, &ButtonText[1][1]); // 1
 
         // Windows are used for the Buttons because they give it a "button" feel
         Buttons[0] = createWin(3, (COLS / 5), LINES - 5, 3);
-        Buttons[1] = createWin(3, (COLS / 5), LINES - 5, 3 + (COLS / 5));
-        Buttons[2] = createWin(3, (COLS / 5), LINES - 5, COLS - (COLS / 5) - 3);
+        Buttons[1] = createWin(3, (COLS / 5), LINES - 5, COLS - (COLS / 5) - 3);
         //    Neu Importieren OK
 
         mvprintw(0, 0, "%i %i", KEY_ENTER, keych);
