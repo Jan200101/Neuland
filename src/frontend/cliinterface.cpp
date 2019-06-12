@@ -89,6 +89,7 @@ int CliWindow::exec()
 
     std::vector<fs::directory_entry> paths;
     std::vector<Json::Value> cards;
+    std::vector<Json::Value> answers;
 
     {
         fs::directory_iterator carddir = Backend::listCarddir();
@@ -164,9 +165,9 @@ int CliWindow::exec()
 
                 do
                 {
-                    if (curcard != (unsigned short)-1)
+                    if (!answers.empty())
                     {
-                        if (cards[curcard]["answers"].size() > keych - '1' && cards[curcard]["answers"][keych - '1'][1].asBool())
+                        if (answers.size() > keych - '1' && answers[keych - '1'][1].asBool())
                         {
                             cards.erase(cards.begin() + curcard);
                             ++answered;
@@ -181,6 +182,11 @@ int CliWindow::exec()
                     if (keych != KEY_RESIZE)
                         curcard = std::rand() % cards.size();
 
+                    answers.clear();
+                    std::copy(cards[curcard]["answers"].begin(), cards[curcard]["answers"].end(),
+                              std::back_inserter(answers));
+                    std::random_shuffle(answers.begin(), answers.end());
+
                     destroyWin(win);
                     refresh();
 
@@ -190,9 +196,9 @@ int CliWindow::exec()
 
                     mvprintw(3, (COLS - std::strlen(cards[curcard].get("question", "").asCString())) / 2, "%s", cards[curcard].get("question", "").asCString());
 
-                    for (unsigned int i = 0; i < cards[curcard]["answers"].size(); ++i)
+                    for (unsigned int i = 0; i < answers.size(); ++i)
                     {
-                        mvprintw(5 + i, 4, "%i. %s", i + 1, cards[curcard]["answers"][i][0].asCString());
+                        mvprintw(5 + i, 4, "%i. %s", i + 1, answers[i][0].asCString());
                     }
 
                 } while (!cards.empty() && (keych = getch()) != exitkey);
