@@ -183,7 +183,9 @@ int CliWindow::exec()
                     if (cards.empty())
                         continue;
 
-                    curcard = std::rand() % cards.size();
+                    // todo don't change curcard on resize
+                    if (keych != KEY_RESIZE)
+                        curcard = std::rand() % cards.size();
 
                     destroyWin(win);
                     refresh();
