@@ -118,7 +118,7 @@ int CliWindow::exec()
         curcard,
         scrollpos = 0,
         cursorpos = scrollpos;
-    unsigned int keych = -1;
+    unsigned int keych = 0;
 
     std::string title;
 
@@ -147,7 +147,7 @@ int CliWindow::exec()
             case 'O':
             case 'o':
 
-                keych = -1;
+                keych = 0;
                 curcard = -1;
                 answered = 0;
 
@@ -207,6 +207,8 @@ int CliWindow::exec()
             case 'N':
             case 'n':
                 keych = 0;
+                curs_set(1);
+                title.clear();
 
                 do
                 {
@@ -238,6 +240,7 @@ int CliWindow::exec()
                     mvprintw(3, 4, "Title");
                     mvprintw(4, 5, "%s", title.c_str());
                 } while ((keych = getch()) != exitkey);
+                curs_set(0);
                 break;
 
             case KEY_UP:
