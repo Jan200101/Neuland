@@ -120,6 +120,8 @@ int CliWindow::exec()
         cursorpos = scrollpos;
     unsigned int keych = -1;
 
+    std::string title;
+
     initscr();
 
     if (hasColors)
@@ -170,7 +172,7 @@ int CliWindow::exec()
                 {
                     if (curcard != (unsigned short)-1)
                     {
-                        if (cards[curcard]["answers"].size() > keych - 49 && cards[curcard]["answers"][keych - 49][1].asBool())
+                        if (cards[curcard]["answers"].size() > keych - '1' && cards[curcard]["answers"][keych - '1'][1].asBool())
                         {
                             cards.erase(cards.begin() + curcard);
                             ++answered;
@@ -202,22 +204,37 @@ int CliWindow::exec()
 
             case 'N':
             case 'n':
+                keych = 0;
+
                 do
                 {
+                    clear();
+                    switch (keych)
+                    {
+                        case 0:
+                            // pass
+                            break;
+
+                        case 263:
+                            if (!title.empty())
+                                title.erase(title.end() - 1);
+                            break;
+
+                        case 10:
+                        case KEY_ENTER:
+                            break;
+
+                        default:
+                            title += keych;
+                    }
+
                     destroyWin(win);
                     refresh();
 
                     win = createWin(LINES - 3, COLS - 4, 2, 2);
 
-                    mvprintw(0, 0, "N\nI still have to implement this.");
-                } while ((keych = getch()) != exitkey);
-                break;
-
-            case 'I':
-            case 'i':
-                do
-                {
-                    mvprintw(0, 0, "I\nI still have to implement this.");
+                    mvprintw(3, 4, "Title");
+                    mvprintw(4, 5, "%s", title.c_str());
                 } while ((keych = getch()) != exitkey);
                 break;
 
@@ -294,22 +311,16 @@ int CliWindow::exec()
 
             mvprintw(4 + textpos - scrollpos, 7, "%s", p.path().stem().string().c_str());
 
-            try
+            unsigned short size = card.get("categories", Json::Value()).size();
+            for (unsigned short i = 0; i < size; ++i)
             {
-                unsigned short size = card.get("categories", Json::Value()).size();
-                for (unsigned short i = 0; i < size; ++i)
-                {
-                    if (!categories.empty())
-                        categories += ", ";
-                    categories += card.get("categories", Json::Value())[i].asString();
-                }
+                if (!categories.empty())
+                    categories += ", ";
+                categories += card.get("categories", Json::Value())[i].asString();
+            }
 
-                mvprintw(4 + textpos - scrollpos, 20, "%u", card.get("cards", Json::Value()).size());
-                mvprintw(4 + textpos - scrollpos, 30, "%s", categories.c_str());
-            }
-            catch (Json::LogicError& err)
-            {
-            }
+            mvprintw(4 + textpos - scrollpos, 20, "%u", card.get("cards", Json::Value()).size());
+            mvprintw(4 + textpos - scrollpos, 30, "%s", categories.c_str());
         }
 
         attron(A_UNDERLINE);
