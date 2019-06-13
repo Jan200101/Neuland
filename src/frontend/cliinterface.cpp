@@ -109,11 +109,12 @@ int CliWindow::exec()
     };
 
     unsigned short textpos,
-        answered,
+        state,
         curcard,
         scrollpos = 0,
         cursorpos = scrollpos;
-    unsigned int keych = 0;
+    unsigned int keych = 0,
+                 highscore = config.get("highscore", 0).asInt();
 
     std::string title;
 
@@ -144,7 +145,7 @@ int CliWindow::exec()
 
                 keych = 0;
                 curcard = -1;
-                answered = 0;
+                state = 0;
 
                 if (file.is_open())
                     file.close();
@@ -170,7 +171,7 @@ int CliWindow::exec()
                         if (answers.size() > keych - '1' && answers[keych - '1'][1].asBool())
                         {
                             cards.erase(cards.begin() + curcard);
-                            ++answered;
+                            ++state;
                         }
                     }
                     clear();
@@ -192,7 +193,7 @@ int CliWindow::exec()
 
                     win = createWin(LINES - 2, COLS - 4, 1, 2);
 
-                    mvprintw(2, COLS - 24 - (int)(answered >= 10 ? 1 : 0), "%u richtig beantwortet", answered);
+                    mvprintw(2, COLS - 24 - (int)(state >= 10 ? 1 : 0), "%u richtig beantwortet", state);
 
                     mvprintw(3, (COLS - std::strlen(cards[curcard].get("question", "").asCString())) / 2, "%s", cards[curcard].get("question", "").asCString());
 
@@ -202,34 +203,54 @@ int CliWindow::exec()
                     }
 
                 } while (!cards.empty() && (keych = getch()) != exitkey);
+
+                highscore += state;
+
                 break;
 
             case 'N':
             case 'n':
                 keych = 0;
+                state = 0;
                 curs_set(1);
                 title.clear();
 
                 do
                 {
                     clear();
-                    switch (keych)
+                    switch (state)
                     {
                         case 0:
-                            // pass
+                            switch (keych)
+                            {
+                                case 0:
+                                    // pass
+                                    break;
+
+                                case 263:
+                                    if (!title.empty())
+                                        title.erase(title.end() - 1);
+                                    break;
+
+                                case 10:
+                                case KEY_ENTER:
+                                    ++state;
+                                    break;
+
+                                default:
+                                    title += keych;
+                            }
                             break;
 
-                        case 263:
-                            if (!title.empty())
-                                title.erase(title.end() - 1);
+                        case 1:
+                            switch (keych)
+                            {
+                                case 10:
+                                case KEY_ENTER:
+                                    ++state;
+                                    break;
+                            }
                             break;
-
-                        case 10:
-                        case KEY_ENTER:
-                            break;
-
-                        default:
-                            title += keych;
                     }
 
                     destroyWin(win);
@@ -238,8 +259,10 @@ int CliWindow::exec()
                     win = createWin(LINES - 3, COLS - 4, 2, 2);
 
                     mvprintw(3, 4, "Title");
+                    mvprintw(5, 4, "Kategorien");
                     mvprintw(4, 5, "%s", title.c_str());
-                } while ((keych = getch()) != exitkey);
+
+                } while ((keych = getch()) != exitkey && state < 2);
                 curs_set(0);
                 break;
 
@@ -341,10 +364,13 @@ int CliWindow::exec()
         Buttons[1] = createWin(3, (COLS / 5), LINES - 5, COLS - (COLS / 5) - 3);
         //    Neu Importieren OK
 
-        mvprintw(0, 0, "%i %i", KEY_ENTER, keych);
+        mvprintw(0, 0, "%i Fragen richtig beantwortet", highscore);
 
         refresh();
     } while ((keych = getch()) != exitkey);
+
+    config["highscore"] = highscore;
+    Config::writeConfig(config);
 
     endwin(); /* End curses mode		  */
     return 0;
