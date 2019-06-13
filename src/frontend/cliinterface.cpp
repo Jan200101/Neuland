@@ -14,8 +14,7 @@
 #include "backend/dirs.hpp"
 #include "backend/files.hpp"
 
-#define TEXTCOLOR 1
-#define TITLECOLOR 2
+#define TITLECOLOR 1
 
 namespace fs = std::filesystem;
 
@@ -82,7 +81,6 @@ int CliWindow::exec()
 {
     std::ifstream file;
     Json::Value card;
-    std::string categories;
 
     WINDOW* win = nullptr;
     WINDOW* list = nullptr;
@@ -117,13 +115,13 @@ int CliWindow::exec()
                  highscore = config.get("highscore", 0).asInt();
 
     std::string title;
+    std::string categories;
 
     initscr();
 
     if (hasColors)
     {
         start_color();
-        init_pair(TEXTCOLOR, COLOR_BLACK, COLOR_WHITE);
         init_pair(TITLECOLOR, COLOR_RED, COLOR_BLACK);
     }
 
@@ -214,10 +212,20 @@ int CliWindow::exec()
                 state = 0;
                 curs_set(1);
                 title.clear();
+                categories.clear();
 
                 do
                 {
                     clear();
+
+                    destroyWin(win);
+                    refresh();
+
+                    win = createWin(LINES - 3, COLS - 4, 2, 2);
+
+                    mvprintw(3, 4, "Title");
+                    mvprintw(5, 4, "Kategorien");
+
                     switch (state)
                     {
                         case 0:
@@ -240,29 +248,35 @@ int CliWindow::exec()
                                 default:
                                     title += keych;
                             }
+                            mvprintw(6, 5, "%s", categories.c_str());
+                            mvprintw(4, 5, "%s", title.c_str());
                             break;
 
                         case 1:
                             switch (keych)
                             {
+                                case 263:
+                                    if (!categories.empty())
+                                        categories.erase(categories.end() - 1);
+                                    break;
+
                                 case 10:
                                 case KEY_ENTER:
                                     ++state;
                                     break;
+
+                                default:
+                                    categories += keych;
                             }
+                            mvprintw(4, 5, "%s", title.c_str());
+                            mvprintw(6, 5, "%s", categories.c_str());
                             break;
                     }
+                } while (state < 2 && (keych = getch()) != exitkey);
 
-                    destroyWin(win);
-                    refresh();
+                mvprintw(0, 0, "TODO");
+                getch();
 
-                    win = createWin(LINES - 3, COLS - 4, 2, 2);
-
-                    mvprintw(3, 4, "Title");
-                    mvprintw(5, 4, "Kategorien");
-                    mvprintw(4, 5, "%s", title.c_str());
-
-                } while ((keych = getch()) != exitkey && state < 2);
                 curs_set(0);
                 break;
 
