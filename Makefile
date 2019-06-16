@@ -162,13 +162,18 @@ loc:
 
 
 install:
-	@test -d /opt/${NAME}/bin || mkdir -p /opt/${NAME}/bin
-	install -m 755 -p -s bin/${NAME}$${OUT_EXT} /opt/${NAME}/bin
+	@test -d /opt/${NAME}/bin   || mkdir -p /opt/${NAME}/bin
+	@test -d /opt/${NAME}/icons || mkdir -p /opt/${NAME}/icons
+	install -m 755 -p -s bin/${NAME}${OUT_EXT} /opt/${NAME}/bin
+	install -m 644 -p    ui/icons/icon.png     /opt/${NAME}/icons
+	install -m 644 -p    res/${NAME}.desktop   /usr/share/applications
 	@echo Installed
 
 uninstall:
 	-@$(RM) -rf /opt/Neuland/bin/
+	-@$(RM) -rf /opt/Neuland/icons/
 	-@$(RMDIR) /opt/Neuland
+	-@$(RM) /usr/share/applications/${NAME}.desktop
 	@echo Uninstalled
 
 # TAR
